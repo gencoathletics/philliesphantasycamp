@@ -15,13 +15,14 @@ function loadCSV(url, tableId, defaultSortColumn = 0) {
           const first = r[1];
           const last = r[2];
 
-          // Create clickable name
-          const nameLink = `<a href="players/player.html?id=${playerID}">${first} ${last}</a>`;
+// Create clickable name
+const nameLink = `<a href="players/player.html?id=${playerID}">${first} ${last}</a>`;
 
-          // Replace FIRST NAME and LAST NAME columns with the link
-          const newRow = [...r];
-          newRow[1] = nameLink;   // FIRST NAME column becomes link
-          newRow[2] = "";         // LAST NAME column blank (optional)
+// Replace FIRST NAME and LAST NAME columns
+const newRow = [...r];
+newRow[1] = nameLink;   // FIRST NAME column becomes link
+newRow[2] = last;       // LAST NAME stays as plain text (keeps column count correct)
+
 
           return `<tr>${newRow.map(c => `<td>${c}</td>`).join("")}</tr>`;
         })
