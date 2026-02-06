@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Player Profile</title>
+
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      background: #f7f7f7;
+    }
+    h1 {
+      margin-bottom: 5px;
+    }
+    h2 {
+      margin-top: 40px;
+      color: #b30000;
+    }
+    .player-header {
+      margin-bottom: 30px;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="player-header">
+  <h1 id="playerName"></h1>
+  <div id="playerID"></div>
+</div>
+
+<h2>Career Statistics</h2>
+<table id="careerTable" class="display"></table>
+
+<h2>Season-by-Season Statistics</h2>
+<table id="seasonTable" class="display"></table>
+
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+<script>
+// Get player ID from URL: players/player.html?id=862
+const urlParams = new URLSearchParams(window.location.search);
+const playerID = urlParams.get("id");
+
+// Display ID
+document.getElementById("playerID").innerText = "Player ID: " + playerID;
+
+// Load CSV helper
+function loadCSV(url) {
+  return fetch(url)
+    .then(r => r.text())
+    .then(text => text.trim().split("\n").map(row => row.split(",")));
+}
+
+// Load career + season data
+Promise.all([
+  loadCSV("../data/hittingcareer_normalized.csv"),
+  loadCSV("../data/hitting_normalized.csv")
+]).then(([careerData, seasonData]) => {
+
+  // Extract headers
+  const careerHeaders = careerData[0];
+  const seasonHeaders = seasonData[0];
+
+  // Filter for this player
+  const careerRow = careerData.find(r => r[0] === playerID);
+  const seasonRows = seasonData.filter(r => r[0] === playerID);
+
+  // Set player name
+  if (careerRow) {
+    const first = careerRow[1];
+    const last = careerRow[2];
+    document.getElementById("playerName").innerText = first + " " + last;
+  }
+
+  // Build career table
+  if (careerRow) {
+    const careerHTML = `
+      <thead><tr>${careerHeaders.map(h => `<th>${h}</th>`).join("")}</tr></thead>
+      <tbody><tr>${careerRow.map(c => `<td>${c}</td>`).join("")}</tr></tbody>
+    `;
+    document.getElementById("careerTable").innerHTML = careerHTML;
+    new DataTable("#careerTable");
+  }
+
+  // Build season table
+  if (seasonRows.length > 0) {
+    const seasonHTML = `
+      <thead><tr>${seasonHeaders.map(h => `<th>${h}</th>`).join("")}</tr></thead>
+      <tbody>
+        ${seasonRows.map(r => `<tr>${r.map(c => `<td>${c}</td>`).join("")}</tr>`).join("")}
+      </tbody>
+    `;
+    document.getElementById("seasonTable").innerHTML = seasonHTML;
+    new DataTable("#seasonTable");
+  }
+});
+</script>
+
+</body>
+</html>
