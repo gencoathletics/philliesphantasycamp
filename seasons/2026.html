@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>2026 Season Leaders</title>
+
+  <!-- DataTables CSS -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      background: #f7f7f7;
+    }
+    h1 {
+      color: #b30000;
+      margin-bottom: 20px;
+    }
+    h2 {
+      margin-top: 40px;
+      color: #444;
+    }
+  </style>
+</head>
+
+<body>
+
+<h1>2026 Season Leaders</h1>
+
+<h2>Hitting Leaders</h2>
+<table id="seasonHitting" class="display"></table>
+
+<h2>Pitching Leaders</h2>
+<table id="seasonPitching" class="display"></table>
+
+<!-- jQuery + DataTables -->
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+<!-- Shared season JS -->
+<script src="season.js"></script>
+
+</body>
+</html>
