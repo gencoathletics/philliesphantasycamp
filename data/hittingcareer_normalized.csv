@@ -1,4 +1,4 @@
-﻿PLAYER ID,FIRST NAME,LastNameClean,Career_AB,Career_H,Career_R,Career_RBI,Career_2B,Career_3B,Career_BB,Career_HR,Career_AVG
+﻿PLAYER ID,FIRST NAME,LAST NAME,Career_AB,Career_H,Career_R,Career_RBI,Career_2B,Career_3B,Career_BB,Career_HR,Career_AVG
 1,Craig ,Abouchar,117,63,30,40,14,2,0,0,0.538
 2,Jason,Adams,11,1,4,2,0,0,0,0,0.091
 3,Ryan,Adcock,12,6,4,8,1,0,0,0,0.500
@@ -1143,4 +1143,5 @@
 1146,Stacey,Zimmerman,14,5,1,1,0,0,1,0,0.357
 1147,Chris,Zingler,13,9,6,4,0,0,0,0,0.692
 1148,Anthony,Zinni,11,2,1,2,0,0,0,0,0.182
+
 1149,Bob,Zuckerman,16,9,4,4,1,0,0,0,0.562
