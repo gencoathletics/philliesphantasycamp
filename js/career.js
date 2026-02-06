@@ -8,9 +8,23 @@ function loadCSV(url, tableId, defaultSortColumn = 0) {
       // Build table header
       const thead = `<thead><tr>${headers.map(h => `<th>${h}</th>`).join("")}</tr></thead>`;
 
-      // Build table body
+      // Build table body with clickable names
       const tbody = `<tbody>${rows
-        .map(r => `<tr>${r.map(c => `<td>${c}</td>`).join("")}</tr>`)
+        .map(r => {
+          const playerID = r[0];
+          const first = r[1];
+          const last = r[2];
+
+          // Create clickable name
+          const nameLink = `<a href="players/player.html?id=${playerID}">${first} ${last}</a>`;
+
+          // Replace FIRST NAME and LAST NAME columns with the link
+          const newRow = [...r];
+          newRow[1] = nameLink;   // FIRST NAME column
+          newRow[2] = "";         // LAST NAME column (optional: leave blank)
+
+          return `<tr>${newRow.map(c => `<td>${c}</td>`).join("")}</tr>`;
+        })
         .join("")}</tbody>`;
 
       document.getElementById(tableId).innerHTML = thead + tbody;
@@ -23,9 +37,3 @@ function loadCSV(url, tableId, defaultSortColumn = 0) {
       });
     });
 }
-
-// Load career hitting (sort by Career_AB)
-loadCSV("data/hittingcareer_normalized.csv", "careerHitting", 3);
-
-// Load career pitching (sort by Career_IP)
-loadCSV("data/pitchingcareer_normalized.csv", "careerPitching", 3);
