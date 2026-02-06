@@ -20,8 +20,8 @@ function loadCSV(url, tableId, defaultSortColumn = 0) {
 
           // Replace FIRST NAME and LAST NAME columns with the link
           const newRow = [...r];
-          newRow[1] = nameLink;   // FIRST NAME column
-          newRow[2] = "";         // LAST NAME column (optional: leave blank)
+          newRow[1] = nameLink;   // FIRST NAME column becomes link
+          newRow[2] = "";         // LAST NAME column blank (optional)
 
           return `<tr>${newRow.map(c => `<td>${c}</td>`).join("")}</tr>`;
         })
@@ -37,3 +37,9 @@ function loadCSV(url, tableId, defaultSortColumn = 0) {
       });
     });
 }
+
+// Load career hitting (sort by Career_AB)
+loadCSV("data/hittingcareer_normalized.csv", "careerHitting", 3);
+
+// Load career pitching (sort by Career_IP)
+loadCSV("data/pitchingcareer_normalized.csv", "careerPitching", 3);
