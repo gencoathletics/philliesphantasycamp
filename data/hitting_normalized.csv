@@ -1,4 +1,4 @@
-﻿PLAYER ID,FIRST NAME,LastNameClean,Season,AB,H,R,RBI,2B,BB,3B,HR,AVG,
+﻿PLAYER ID,FIRST NAME,LAST NAME,Season,AB,H,R,RBI,2B,BB,3B,HR,AVG,
 1,Craig ,Abouchar,2016,12,4,2,1,1,0,0,0,0.333,
 1,Craig ,Abouchar,2018,12,6,2,5,1,0,0,0,0.500,
 1,Craig ,Abouchar,2019,13,8,2,6,3,0,0,0,0.615,
@@ -2087,4 +2087,5 @@
 1146,Stacey,Zimmerman,2015,4,0,0,0,0,0,0,0,0.000,
 1147,Chris,Zingler,2020,13,9,6,4,0,0,0,0,0.692,
 1148,Anthony,Zinni,2019,11,2,1,2,0,0,0,0,0.182,
+
 1149,Bob,Zuckerman,2018,16,9,4,4,1,0,0,0,0.562,
