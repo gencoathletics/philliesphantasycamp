@@ -1,4 +1,4 @@
-// Detect season from URL (e.g., "2024.html" → "2024")
+// Detect season from URL (e.g., "2026.html" → "2026")
 const season = window.location.pathname.split("/").pop().replace(".html", "");
 
 // Load CSV helper
