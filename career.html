@@ -1,5 +1,76 @@
-<script src="js/career.js"></script>
-<script>
-  loadHittingCSV("data/career_hitting.csv", "careerHitting", 4);
-  loadPitchingCSV("data/career_pitching.csv", "careerPitching", 5);
-</script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Career Leaders</title>
+
+  <!-- DataTables CSS -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+
+    h2 {
+      color: #b30000;
+      margin-top: 40px;
+    }
+
+    /* Navigation Bar */
+    .navbar {
+      background: #b30000;
+      padding: 12px;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      margin: 0 15px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .navbar a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Global Navigation Bar -->
+  <nav class="navbar">
+    <a href="index.html">Home</a>
+    <a href="career.html">Career Leaders</a>
+    <a href="seasons/index.html">Seasons</a>
+    <a href="players/player.html?id=1">Player Pages</a>
+  </nav>
+
+  <h2>Career Hitting Leaders</h2>
+  <table id="careerHitting"></table>
+
+  <h2>Career Pitching Leaders</h2>
+  <table id="careerPitching"></table>
+
+  <!-- jQuery + DataTables JS -->
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+  <!-- Your unified career.js -->
+  <script src="js/career.js"></script>
+
+  <script>
+    // Load Career Hitting Table
+    loadHittingCSV("data/career_hitting.csv", "careerHitting", 4);
+
+    // Load Career Pitching Table
+    loadPitchingCSV("data/career_pitching.csv", "careerPitching", 5);
+  </script>
+
+</body>
+</html>
