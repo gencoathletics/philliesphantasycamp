@@ -54,9 +54,28 @@
   <a href="/philliesphantasycamp/players/player.html?id=1">Player Pages</a>
 </nav>
 
-<!-- Season dropdown (JS will populate it) -->
+<!-- Season dropdown (populated by JS) -->
 <select id="seasonDropdown">
   <option value="">Jump to a Season</option>
 </select>
 
-<h1>2026 Season
+<h1>2026 Season Leaders</h1>
+
+<h2>Hitting Leaders</h2>
+<table id="seasonHitting" class="display"></table>
+
+<h2>Pitching Leaders</h2>
+<table id="seasonPitching" class="display"></table>
+
+<!-- jQuery + DataTables -->
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+<!-- Papa Parse (required for CSV parsing) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+
+<!-- Correct seasons.js path -->
+<script src="../js/seasons.js"></script>
+
+</body>
+</html>
