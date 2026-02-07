@@ -1,61 +1,16 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <title>Career Leaderboards</title>
+<script src="career.js"></script>
+<script>
+  // Load Career Hitting Table
+  loadHittingCSV(
+    "data/career_hitting.csv",   // CSV file
+    "careerHitting",             // Table ID in HTML
+    4                            // Default sort column (Career_H)
+  );
 
-  <!-- DataTables CSS -->
-  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-
-  <style>
-  .navbar {
-    background: #b30000;
-    padding: 12px;
-    text-align: center;
-    margin-bottom: 30px;
-  }
-
-  .navbar a {
-    color: white;
-    text-decoration: none;
-    margin: 0 15px;
-    font-size: 18px;
-    font-weight: bold;
-  }
-
-  .navbar a:hover {
-    text-decoration: underline;
-  }
-
-    body {
-      font-family: Arial, sans-serif;
-      margin: 40px;
-      background: #f7f7f7;
-    }
-    h1 {
-      color: #b30000;
-      margin-top: 40px;
-    }
-  </style>
-</head>
-
-<body>
-<nav class="navbar">
-  <a href="/philliesphantasycamp/index.html">Home</a>
-  <a href="/philliesphantasycamp/career.html">Career Leaders</a>
-  <a href="/philliesphantasycamp/seasons/index.html">Seasons</a>
-  <a href="/philliesphantasycamp/players/player.html?id=1">Player Pages</a>
-</nav>
-
-<h1>Career Hitting Leaders</h1>
-<table id="careerHitting" class="display"></table>
-
-<h1>Career Pitching Leaders</h1>
-<table id="careerPitching" class="display"></table>
-
-<!-- jQuery + DataTables -->
-<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-
-<!-- Your custom JS -->
-<script src="js/career.js"></script>
+  // Load Career Pitching Table
+  loadPitchingCSV(
+    "data/career_pitching.csv",  // CSV file
+    "careerPitching",            // Table ID in HTML
+    5                            // Default sort column (adjust if needed)
+  );
+</script>
