@@ -28,19 +28,23 @@ function loadSeasonHittingCSV(csvPath, tableId, season) {
         .then(text => {
             const parsed = Papa.parse(text, { header: true }).data;
 
-            // Normalize every row
             const rows = parsed.map(normalizeRow);
-
-            // Filter by season
             const filtered = rows.filter(r => r["SEASON"] == season);
 
             $(`#${tableId}`).DataTable({
                 data: filtered,
                 columns: [
-                    { 
+                    {
                         title: "Player",
                         data: null,
-                        render: r => `${r["FIRST NAME"]} ${r["LAST NAME"]}`
+                        render: function (data, type, row) {
+                            const id = row["PLAYER ID"];
+                            const first = row["FIRST NAME"];
+                            const last = row["LAST NAME"];
+                            const full = `${first} ${last}`;
+                            return `<a href="../players/player.html?id=${id}">${full}</a>`;
+                        },
+                        orderData: [2, 1] // sort by LAST NAME then FIRST NAME
                     },
                     { title: "AB", data: "AB" },
                     { title: "H", data: "H" },
@@ -52,10 +56,13 @@ function loadSeasonHittingCSV(csvPath, tableId, season) {
                     { title: "BB", data: "BB" },
                     { title: "AVG", data: "AVG" }
                 ],
+                columnDefs: [
+                    { targets: [0, 2], visible: false, searchable: false } // hide PLAYER ID + LAST NAME
+                ],
                 paging: false,
                 searching: false,
                 info: false,
-                order: [[9, "desc"]]
+                order: [[0, "asc"]]
             });
         });
 }
@@ -69,19 +76,23 @@ function loadSeasonPitchingCSV(csvPath, tableId, season) {
         .then(text => {
             const parsed = Papa.parse(text, { header: true }).data;
 
-            // Normalize every row
             const rows = parsed.map(normalizeRow);
-
-            // Filter by season
             const filtered = rows.filter(r => r["SEASON"] == season);
 
             $(`#${tableId}`).DataTable({
                 data: filtered,
                 columns: [
-                    { 
+                    {
                         title: "Player",
                         data: null,
-                        render: r => `${r["FIRST NAME"]} ${r["LAST NAME"]}`
+                        render: function (data, type, row) {
+                            const id = row["PLAYER ID"];
+                            const first = row["FIRST NAME"];
+                            const last = row["LAST NAME"];
+                            const full = `${first} ${last}`;
+                            return `<a href="../players/player.html?id=${id}">${full}</a>`;
+                        },
+                        orderData: [2, 1] // sort by LAST NAME then FIRST NAME
                     },
                     { title: "IP", data: "IP" },
                     { title: "K", data: "K" },
@@ -93,10 +104,13 @@ function loadSeasonPitchingCSV(csvPath, tableId, season) {
                     { title: "ERA", data: "ERA" },
                     { title: "WHIP", data: "WHIP" }
                 ],
+                columnDefs: [
+                    { targets: [0, 2], visible: false, searchable: false } // hide PLAYER ID + LAST NAME
+                ],
                 paging: false,
                 searching: false,
                 info: false,
-                order: [[8, "asc"]]
+                order: [[0, "asc"]]
             });
         });
 }
