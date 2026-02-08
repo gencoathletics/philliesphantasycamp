@@ -46,6 +46,9 @@ function loadSeasonHittingCSV(csvPath, tableId, season) {
                         },
                         orderData: [3, 2] // sort by LAST NAME then FIRST NAME
                     },
+                    { title: "PLAYER ID", data: "PLAYER ID" },   // hidden
+                    { title: "FIRST NAME", data: "FIRST NAME" }, // hidden
+                    { title: "LAST NAME", data: "LAST NAME" },   // hidden
                     { title: "AB", data: "AB" },
                     { title: "H", data: "H" },
                     { title: "R", data: "R" },
@@ -57,9 +60,8 @@ function loadSeasonHittingCSV(csvPath, tableId, season) {
                     { title: "AVG", data: "AVG" }
                 ],
                 columnDefs: [
-                    { targets: [1, 3], visible: false, searchable: false } 
-                    // 1 = PLAYER ID (hidden)
-                    // 3 = LAST NAME (hidden)
+                    { targets: [1, 2, 3], visible: false, searchable: false }
+                    // 1 = PLAYER ID, 2 = FIRST NAME, 3 = LAST NAME (all hidden)
                 ],
                 paging: false,
                 searching: false,
@@ -96,6 +98,9 @@ function loadSeasonPitchingCSV(csvPath, tableId, season) {
                         },
                         orderData: [3, 2] // sort by LAST NAME then FIRST NAME
                     },
+                    { title: "PLAYER ID", data: "PLAYER ID" },   // hidden
+                    { title: "FIRST NAME", data: "FIRST NAME" }, // hidden
+                    { title: "LAST NAME", data: "LAST NAME" },   // hidden
                     { title: "IP", data: "IP" },
                     { title: "K", data: "K" },
                     { title: "W", data: "W" },
@@ -107,9 +112,8 @@ function loadSeasonPitchingCSV(csvPath, tableId, season) {
                     { title: "WHIP", data: "WHIP" }
                 ],
                 columnDefs: [
-                    { targets: [1, 3], visible: false, searchable: false }
-                    // 1 = PLAYER ID (hidden)
-                    // 3 = LAST NAME (hidden)
+                    { targets: [1, 2, 3], visible: false, searchable: false }
+                    // 1 = PLAYER ID, 2 = FIRST NAME, 3 = LAST NAME (all hidden)
                 ],
                 paging: false,
                 searching: false,
