@@ -44,7 +44,7 @@ function loadSeasonHittingCSV(csvPath, tableId, season) {
                             const full = `${first} ${last}`;
                             return `<a href="../players/player.html?id=${id}">${full}</a>`;
                         },
-                        orderData: [2, 1] // sort by LAST NAME then FIRST NAME
+                        orderData: [3, 2] // sort by LAST NAME then FIRST NAME
                     },
                     { title: "AB", data: "AB" },
                     { title: "H", data: "H" },
@@ -57,7 +57,9 @@ function loadSeasonHittingCSV(csvPath, tableId, season) {
                     { title: "AVG", data: "AVG" }
                 ],
                 columnDefs: [
-                    { targets: [0, 2], visible: false, searchable: false } // hide PLAYER ID + LAST NAME
+                    { targets: [1, 3], visible: false, searchable: false } 
+                    // 1 = PLAYER ID (hidden)
+                    // 3 = LAST NAME (hidden)
                 ],
                 paging: false,
                 searching: false,
@@ -92,7 +94,7 @@ function loadSeasonPitchingCSV(csvPath, tableId, season) {
                             const full = `${first} ${last}`;
                             return `<a href="../players/player.html?id=${id}">${full}</a>`;
                         },
-                        orderData: [2, 1] // sort by LAST NAME then FIRST NAME
+                        orderData: [3, 2] // sort by LAST NAME then FIRST NAME
                     },
                     { title: "IP", data: "IP" },
                     { title: "K", data: "K" },
@@ -105,7 +107,9 @@ function loadSeasonPitchingCSV(csvPath, tableId, season) {
                     { title: "WHIP", data: "WHIP" }
                 ],
                 columnDefs: [
-                    { targets: [0, 2], visible: false, searchable: false } // hide PLAYER ID + LAST NAME
+                    { targets: [1, 3], visible: false, searchable: false }
+                    // 1 = PLAYER ID (hidden)
+                    // 3 = LAST NAME (hidden)
                 ],
                 paging: false,
                 searching: false,
