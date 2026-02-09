@@ -2,13 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Career Leaders - Phillies Phantasy Camp</title>
-
-    <!-- DataTables + jQuery + PapaParse -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <title>Seasons - Phillies Phantasy Camp</title>
 
     <style>
         body {
@@ -29,12 +23,27 @@
             font-weight: bold;
         }
 
-        h1, h2 {
+        h1 {
             color: #b30000;
         }
 
-        table {
-            margin-bottom: 40px;
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        li {
+            margin: 8px 0;
+        }
+
+        a.season-link {
+            color: #b30000;
+            font-size: 18px;
+            text-decoration: none;
+        }
+
+        a.season-link:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -49,45 +58,28 @@
         <a href="/philliesphantasycamp/players/player.html?id=1">Player Pages</a>
     </nav>
 
-    <h1>Career Leaders</h1>
+    <h1>Seasons</h1>
 
-    <h2>Career Hitting Leaders</h2>
-    <table id="careerHitting" class="display">
-        <thead>
-            <tr>
-                <th>Player</th>
-                <th>AB</th>
-                <th>H</th>
-                <th>R</th>
-                <th>RBI</th>
-                <th>2B</th>
-                <th>3B</th>
-                <th>HR</th>
-                <th>AVG</th>
-            </tr>
-        </thead>
-    </table>
-
-    <h2>Career Pitching Leaders</h2>
-    <table id="careerPitching" class="display">
-        <thead>
-            <tr>
-                <th>Player</th>
-                <th>IP</th>
-                <th>K</th>
-                <th>W</th>
-                <th>S</th>
-                <th>BB</th>
-                <th>R</th>
-                <th>H</th>
-                <th>ERA</th>
-                <th>WHIP</th>
-            </tr>
-        </thead>
-    </table>
-
-    <!-- Career JS -->
-    <script src="/philliesphantasycamp/js/career.js"></script>
+    <ul>
+        <li><a class="season-link" href="2026.html">2026 Season</a></li>
+        <li><a class="season-link" href="2025.html">2025 Season</a></li>
+        <li><a class="season-link" href="2024.html">2024 Season</a></li>
+        <li><a class="season-link" href="2023.html">2023 Season</a></li>
+        <li><a class="season-link" href="2022.html">2022 Season</a></li>
+        <li><a class="season-link" href="2021.html">2021 Season</a></li>
+        <li><a class="season-link" href="2020.html">2020 Season</a></li>
+        <li><a class="season-link" href="2019.html">2019 Season</a></li>
+        <li><a class="season-link" href="2018.html">2018 Season</a></li>
+        <li><a class="season-link" href="2017.html">2017 Season</a></li>
+        <li><a class="season-link" href="2016.html">2016 Season</a></li>
+        <li><a class="season-link" href="2015.html">2015 Season</a></li>
+        <li><a class="season-link" href="2014.html">2014 Season</a></li>
+        <li><a class="season-link" href="2013.html">2013 Season</a></li>
+        <li><a class="season-link" href="2012.html">2012 Season</a></li>
+        <li><a class="season-link" href="2011.html">2011 Season</a></li>
+        <li><a class="season-link" href="2010.html">2010 Season</a></li>
+        <li><a class="season-link" href="2009.html">2009 Season</a></li>
+    </ul>
 
 </body>
 </html>
