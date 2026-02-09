@@ -13,6 +13,16 @@ const TEMPLATE = (year) => `
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     <script src="../js/seasons.js"></script>
+
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h1 { margin-bottom: 10px; color: #b30000; }
+        h2 { margin-top: 40px; margin-bottom: 10px; }
+        table.dataTable { width: 100% !important; margin-bottom: 40px; }
+        nav { background-color: #8b0000; padding: 10px; }
+        nav a { color: white; margin-right: 20px; text-decoration: none; font-weight: bold; }
+        #seasonDropdown { margin-top: 20px; margin-bottom: 20px; padding: 5px; }
+    </style>
 </head>
 
 <body>
