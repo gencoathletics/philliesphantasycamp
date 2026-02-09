@@ -45,6 +45,8 @@ const TEMPLATE = (year) => `
         <thead>
             <tr>
                 <th>Player</th>
+                <th style="display:none;"></th> <!-- LAST NAME -->
+                <th style="display:none;"></th> <!-- FIRST NAME -->
                 <th>AB</th>
                 <th>H</th>
                 <th>R</th>
@@ -62,6 +64,8 @@ const TEMPLATE = (year) => `
         <thead>
             <tr>
                 <th>Player</th>
+                <th style="display:none;"></th> <!-- LAST NAME -->
+                <th style="display:none;"></th> <!-- FIRST NAME -->
                 <th>IP</th>
                 <th>K</th>
                 <th>W</th>
