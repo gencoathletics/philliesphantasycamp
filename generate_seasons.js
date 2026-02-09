@@ -1,0 +1,82 @@
+const fs = require("fs");
+const path = require("path");
+
+const TEMPLATE = (year) => `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>${year} Season Leaders</title>
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <script src="../js/seasons.js"></script>
+</head>
+
+<body>
+
+    <nav>
+        <a href="../index.html">Home</a>
+        <a href="../career.html">Career Leaders</a>
+        <a href="../seasons/2026.html">Seasons</a>
+        <a href="../players/player.html?id=1">Player Pages</a>
+    </nav>
+
+    <select id="seasonDropdown">
+        <option value="">Jump to a Season</option>
+    </select>
+
+    <h1>${year} Season Leaders</h1>
+
+    <h2>Hitting Leaders</h2>
+    <table id="seasonHitting" class="display">
+        <thead>
+            <tr>
+                <th>Player</th>
+                <th>AB</th>
+                <th>H</th>
+                <th>R</th>
+                <th>RBI</th>
+                <th>2B</th>
+                <th>3B</th>
+                <th>HR</th>
+                <th>AVG</th>
+            </tr>
+        </thead>
+    </table>
+
+    <h2>Pitching Leaders</h2>
+    <table id="seasonPitching" class="display">
+        <thead>
+            <tr>
+                <th>Player</th>
+                <th>IP</th>
+                <th>K</th>
+                <th>W</th>
+                <th>S</th>
+                <th>BB</th>
+                <th>R</th>
+                <th>H</th>
+                <th>ERA</th>
+                <th>WHIP</th>
+            </tr>
+        </thead>
+    </table>
+
+    <script>
+        loadSeason("${year}");
+    </script>
+
+</body>
+</html>
+`;
+
+const seasonsDir = path.join(__dirname, "seasons");
+
+for (let year = 2009; year <= 2026; year++) {
+    const filePath = path.join(seasonsDir, `${year}.html`);
+    fs.writeFileSync(filePath, TEMPLATE(year));
+    console.log(`Generated: ${filePath}`);
+}
