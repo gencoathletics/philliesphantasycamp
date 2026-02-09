@@ -3,7 +3,7 @@ function loadCSV(path, callback) {
     Papa.parse(path, {
         download: true,
         header: true,
-        dynamicTyping: true,
+        dynamicTyping: false,   // IMPORTANT: keep IP as text
         complete: function (results) {
             callback(results.data);
         }
@@ -15,15 +15,39 @@ function sortKey(row) {
     return `${row["LAST NAME"]} ${row["FIRST NAME"]}`.toUpperCase();
 }
 
+// Convert baseball IP stored as "99 2/3" into a sortable number
+function convertFractionIP(ipString) {
+    if (!ipString || typeof ipString !== "string") return 0;
+
+    // Example: "99 2/3"
+    const parts = ipString.trim().split(" ");
+
+    if (parts.length === 1) {
+        // No fraction, just a whole number
+        return Number(parts[0]);
+    }
+
+    const whole = Number(parts[0]);
+    const fraction = parts[1]; // "2/3"
+
+    const [num, den] = fraction.split("/").map(Number);
+
+    if (!isNaN(whole) && !isNaN(num) && !isNaN(den) && den !== 0) {
+        return whole + (num / den);
+    }
+
+    return whole;
+}
+
 // Format AVG to 3 decimals
 function formatAVG(value) {
-    if (value === null || value === undefined || value === "") return "";
+    if (!value) return "";
     return Number(value).toFixed(3);
 }
 
 // Format ERA/WHIP to 2 decimals
 function format2(value) {
-    if (value === null || value === undefined || value === "") return "";
+    if (!value) return "";
     return Number(value).toFixed(2);
 }
 
@@ -37,9 +61,7 @@ function buildCareerHittingTable(rows) {
                 title: "Player",
                 data: null,
                 render: function (row, type) {
-                    if (type === "sort") {
-                        return sortKey(row);   // hidden sort key
-                    }
+                    if (type === "sort") return sortKey(row);
                     return `<a href="/philliesphantasycamp/players/${row["PLAYER ID"]}.html">${row["FIRST NAME"]} ${row["LAST NAME"]}</a>`;
                 }
             },
@@ -71,13 +93,17 @@ function buildCareerPitchingTable(rows) {
                 title: "Player",
                 data: null,
                 render: function (row, type) {
-                    if (type === "sort") {
-                        return sortKey(row);   // hidden sort key
-                    }
+                    if (type === "sort") return sortKey(row);
                     return `<a href="/philliesphantasycamp/players/${row["PLAYER ID"]}.html">${row["FIRST NAME"]} ${row["LAST NAME"]}</a>`;
                 }
             },
-            { data: "IP" },
+            {
+                data: "IP",
+                render: function (value, type) {
+                    if (type === "sort") return convertFractionIP(value);
+                    return value; // display exactly as CSV
+                }
+            },
             { data: "K" },
             { data: "W" },
             { data: "S" },
