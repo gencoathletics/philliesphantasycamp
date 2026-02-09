@@ -1,64 +1,19 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Season Leaders</title>
+    <title>2009 Season Leaders</title>
 
-    <!-- DataTables + jQuery -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-
-    <!-- Papa Parse -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
-
-    <!-- Seasons JS -->
     <script src="../js/seasons.js"></script>
-
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-
-        h1 {
-            margin-bottom: 10px;
-            color: #b30000;
-        }
-
-        h2 {
-            margin-top: 40px;
-            margin-bottom: 10px;
-        }
-
-        table.dataTable {
-            width: 100% !important;
-            margin-bottom: 40px;
-        }
-
-        nav {
-            background-color: #8b0000;
-            padding: 10px;
-        }
-
-        nav a {
-            color: white;
-            margin-right: 20px;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        #seasonDropdown {
-            margin-top: 20px;
-            margin-bottom: 20px;
-            padding: 5px;
-        }
-    </style>
 </head>
 
 <body>
 
-    <!-- Navigation -->
     <nav>
         <a href="../index.html">Home</a>
         <a href="../career.html">Career Leaders</a>
@@ -66,15 +21,12 @@
         <a href="../players/player.html?id=1">Player Pages</a>
     </nav>
 
-    <!-- Season Dropdown -->
     <select id="seasonDropdown">
         <option value="">Jump to a Season</option>
     </select>
 
-    <!-- Page Title -->
     <h1>2009 Season Leaders</h1>
 
-    <!-- Hitting Table -->
     <h2>Hitting Leaders</h2>
     <table id="seasonHitting" class="display">
         <thead>
@@ -92,7 +44,6 @@
         </thead>
     </table>
 
-    <!-- Pitching Table -->
     <h2>Pitching Leaders</h2>
     <table id="seasonPitching" class="display">
         <thead>
@@ -111,9 +62,8 @@
         </thead>
     </table>
 
-    <!-- Load Season -->
     <script>
-        loadSeason("2009");   <!-- CHANGE THIS FOR EACH YEAR -->
+        loadSeason("2009");
     </script>
 
 </body>
