@@ -23,11 +23,8 @@ function buildSeasonHittingTable(rows, season) {
                 data: null,
                 render: function (row) {
                     return `<a href="../players/${row["PLAYER ID"]}.html">${row["FIRST NAME"]} ${row["LAST NAME"]}</a>`;
-                },
-                orderData: [1, 2]   // sort by LAST NAME then FIRST NAME
+                }
             },
-            { data: "LAST NAME" },   // hidden
-            { data: "FIRST NAME" },  // hidden
             { data: "AB" },
             { data: "H" },
             { data: "R" },
@@ -36,13 +33,6 @@ function buildSeasonHittingTable(rows, season) {
             { data: "3B" },
             { data: "HR" },
             { data: "AVG" }
-        ],
-        columnDefs: [
-            {
-                targets: [1, 2],   // hide LAST NAME + FIRST NAME
-                visible: false,
-                searchable: false
-            }
         ],
         order: [[0, "asc"]]
     });
@@ -61,11 +51,8 @@ function buildSeasonPitchingTable(rows, season) {
                 data: null,
                 render: function (row) {
                     return `<a href="../players/${row["PLAYER ID"]}.html">${row["FIRST NAME"]} ${row["LAST NAME"]}</a>`;
-                },
-                orderData: [1, 2]   // sort by LAST NAME then FIRST NAME
+                }
             },
-            { data: "LAST NAME" },   // hidden
-            { data: "FIRST NAME" },  // hidden
             { data: "IP" },
             { data: "K" },
             { data: "W" },
@@ -75,13 +62,6 @@ function buildSeasonPitchingTable(rows, season) {
             { data: "H" },
             { data: "ERA" },
             { data: "WHIP" }
-        ],
-        columnDefs: [
-            {
-                targets: [1, 2],   // hide LAST NAME + FIRST NAME
-                visible: false,
-                searchable: false
-            }
         ],
         order: [[9, "asc"]]   // ERA ascending
     });
