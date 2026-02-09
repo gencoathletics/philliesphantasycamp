@@ -1,135 +1,68 @@
-// ===============================
-//  CAREER HITTING TABLE LOADER
-// ===============================
-function loadHittingCSV(url, tableId, defaultSortColumn = 0) {
-  fetch(url)
-    .then(response => response.text())
-    .then(data => {
-      const rows = data.trim().split("\n").map(r => r.split(","));
-      const headers = rows.shift();  // first row = header
-
-      // Modify headers: rename FIRST NAME → PLAYER
-      const displayHeaders = [...headers];
-      displayHeaders[1] = "PLAYER";   // rename FIRST NAME
-
-      // Build table header
-      const thead = `<thead><tr>${displayHeaders.map(h => `<th>${h}</th>`).join("")}</tr></thead>`;
-
-      // Build table body
-      const tbody = `<tbody>${rows
-        .map(r => {
-          const playerID = r[0];
-          const first = r[1];
-          const last = r[2];
-
-          // Create clickable full name
-          const nameLink = `<a href="players/player.html?id=${playerID}">${first} ${last}</a>`;
-
-          // Build a new row with EXACT column count
-          const newRow = [...r];
-          newRow[1] = nameLink;  // FIRST NAME becomes full clickable name
-          newRow[2] = last;      // LAST NAME stays in data but will be hidden
-
-          return `<tr>${newRow.map(c => `<td>${c}</td>`).join("")}</tr>`;
-        })
-        .join("")}</tbody>`;
-
-      document.getElementById(tableId).innerHTML = thead + tbody;
-
-      // Activate DataTables with hidden columns + custom sorting
-      new DataTable(`#${tableId}`, {
-        paging: true,
-        searching: true,
-        order: [[defaultSortColumn, "desc"]],
-
-        columnDefs: [
-          {
-            // Hide PLAYER ID
-            targets: 0,
-            visible: false,
-            searchable: false
-          },
-          {
-            // Hide LAST NAME
-            targets: 2,
-            visible: false,
-            searchable: false
-          },
-          {
-            // PLAYER column sorting: sort by LAST NAME then FIRST NAME
-            targets: 1,
-            orderData: [2, 1]
-          }
-        ]
-      });
+// Load CSV helper
+function loadCSV(path, callback) {
+    Papa.parse(path, {
+        download: true,
+        header: true,
+        dynamicTyping: true,
+        complete: function (results) {
+            callback(results.data);
+        }
     });
 }
 
-
-
-// ===============================
-//  CAREER PITCHING TABLE LOADER
-// ===============================
-function loadPitchingCSV(url, tableId, defaultSortColumn = 0) {
-  fetch(url)
-    .then(response => response.text())
-    .then(data => {
-      const rows = data.trim().split("\n").map(r => r.split(","));
-      const headers = rows.shift();  // first row = header
-
-      // Modify headers: rename FIRST NAME → PLAYER
-      const displayHeaders = [...headers];
-      displayHeaders[1] = "PLAYER";   // rename FIRST NAME
-
-      // Build table header
-      const thead = `<thead><tr>${displayHeaders.map(h => `<th>${h}</th>`).join("")}</tr></thead>`;
-
-      // Build table body
-      const tbody = `<tbody>${rows
-        .map(r => {
-          const playerID = r[0];
-          const first = r[1];
-          const last = r[2];
-
-          // Create clickable full name
-          const nameLink = `<a href="players/player.html?id=${playerID}">${first} ${last}</a>`;
-
-          // Build a new row with EXACT column count
-          const newRow = [...r];
-          newRow[1] = nameLink;  // FIRST NAME becomes full clickable name
-          newRow[2] = last;      // LAST NAME stays in data but will be hidden
-
-          return `<tr>${newRow.map(c => `<td>${c}</td>`).join("")}</tr>`;
-        })
-        .join("")}</tbody>`;
-
-      document.getElementById(tableId).innerHTML = thead + tbody;
-
-      // Activate DataTables with hidden columns + custom sorting
-      new DataTable(`#${tableId}`, {
-        paging: true,
-        searching: true,
-        order: [[defaultSortColumn, "desc"]],
-
-        columnDefs: [
-          {
-            // Hide PLAYER ID
-            targets: 0,
-            visible: false,
-            searchable: false
-          },
-          {
-            // Hide LAST NAME
-            targets: 2,
-            visible: false,
-            searchable: false
-          },
-          {
-            // PLAYER column sorting: sort by LAST NAME then FIRST NAME
-            targets: 1,
-            orderData: [2, 1]
-          }
-        ]
-      });
+// Build Career Hitting Table
+function buildCareerHittingTable(rows) {
+    $('#careerHitting').DataTable({
+        data: rows,
+        destroy: true,
+        columns: [
+            {
+                data: null,
+                render: function (row) {
+                    return `<a href="players/${row["PLAYER ID"]}.html">${row["FIRST NAME"]} ${row["LAST NAME"]}</a>`;
+                }
+            },
+            { data: "AB" },
+            { data: "H" },
+            { data: "R" },
+            { data: "RBI" },
+            { data: "2B" },
+            { data: "3B" },
+            { data: "HR" },
+            { data: "AVG" }
+        ],
+        order: [[8, "desc"]]
     });
+}
+
+// Build Career Pitching Table
+function buildCareerPitchingTable(rows) {
+    $('#careerPitching').DataTable({
+        data: rows,
+        destroy: true,
+        columns: [
+            {
+                data: null,
+                render: function (row) {
+                    return `<a href="players/${row["PLAYER ID"]}.html">${row["FIRST NAME"]} ${row["LAST NAME"]}</a>`;
+                }
+            },
+            { data: "IP" },
+            { data: "K" },
+            { data: "W" },
+            { data: "S" },
+            { data: "BB" },
+            { data: "R" },
+            { data: "H" },
+            { data: "ERA" },
+            { data: "WHIP" }
+        ],
+        order: [[8, "asc"]] // ERA ascending
+    });
+}
+
+// Main loader
+function loadCareer() {
+    loadCSV("data/hittingcareer_normalized.csv", buildCareerHittingTable);
+    loadCSV("data/pitchingcareer_normalized.csv", buildCareerPitchingTable);
 }
