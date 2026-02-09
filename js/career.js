@@ -3,7 +3,7 @@ function loadCSV(path, callback) {
     Papa.parse(path, {
         download: true,
         header: true,
-        dynamicTyping: false,   // IMPORTANT: keep IP as text
+        dynamicTyping: false,   // keep IP as text like "99 2/3"
         complete: function (results) {
             callback(results.data);
         }
@@ -19,24 +19,28 @@ function sortKey(row) {
 function convertFractionIP(ipString) {
     if (!ipString || typeof ipString !== "string") return 0;
 
-    // Example: "99 2/3"
     const parts = ipString.trim().split(" ");
 
     if (parts.length === 1) {
         // No fraction, just a whole number
-        return Number(parts[0]);
+        const wholeOnly = Number(parts[0]);
+        return isNaN(wholeOnly) ? 0 : wholeOnly;
     }
 
     const whole = Number(parts[0]);
-    const fraction = parts[1]; // "2/3"
+    const fraction = parts[1]; // e.g. "2/3"
 
-    const [num, den] = fraction.split("/").map(Number);
+    const fracParts = fraction.split("/");
+    if (fracParts.length !== 2) return isNaN(whole) ? 0 : whole;
 
-    if (!isNaN(whole) && !isNaN(num) && !isNaN(den) && den !== 0) {
-        return whole + (num / den);
+    const num = Number(fracParts[0]);
+    const den = Number(fracParts[1]);
+
+    if (isNaN(whole) || isNaN(num) || isNaN(den) || den === 0) {
+        return isNaN(whole) ? 0 : whole;
     }
 
-    return whole;
+    return whole + (num / den);
 }
 
 // Format AVG to 3 decimals
@@ -85,6 +89,11 @@ function buildCareerHittingTable(rows) {
 
 // Build Career Pitching Table
 function buildCareerPitchingTable(rows) {
+    // Precompute a numeric sort key for IP
+    rows.forEach(function (row) {
+        row.IP_SORT = convertFractionIP(row["IP"]);
+    });
+
     $('#careerPitching').DataTable({
         data: rows,
         destroy: true,
@@ -98,11 +107,7 @@ function buildCareerPitchingTable(rows) {
                 }
             },
             {
-                data: "IP",
-                render: function (value, type) {
-                    if (type === "sort") return convertFractionIP(value);
-                    return value; // display exactly as CSV
-                }
+                data: "IP",   // display "99 2/3"
             },
             { data: "K" },
             { data: "W" },
@@ -121,6 +126,17 @@ function buildCareerPitchingTable(rows) {
                 render: function (value) {
                     return format2(value);
                 }
+            },
+            {
+                data: "IP_SORT",   // hidden numeric sort key
+                visible: false,
+                searchable: false
+            }
+        ],
+        columnDefs: [
+            {
+                targets: 1,       // IP column
+                orderData: [10]   // sort using IP_SORT (last column)
             }
         ],
         order: [[0, "asc"]]
