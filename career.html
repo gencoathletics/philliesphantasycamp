@@ -1,76 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Career Leaders</title>
+    <meta charset="UTF-8">
+    <title>Career Leaders - Phillies Phantasy Camp</title>
 
-  <!-- DataTables CSS -->
-  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <!-- DataTables + jQuery + PapaParse -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-    }
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
 
-    h2 {
-      color: #b30000;
-      margin-top: 40px;
-    }
+        nav {
+            background-color: #8b0000;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
 
-    /* Navigation Bar */
-    .navbar {
-      background: #b30000;
-      padding: 12px;
-      text-align: center;
-      margin-bottom: 30px;
-    }
+        nav a {
+            color: white;
+            margin-right: 20px;
+            text-decoration: none;
+            font-weight: bold;
+        }
 
-    .navbar a {
-      color: white;
-      text-decoration: none;
-      margin: 0 15px;
-      font-size: 18px;
-      font-weight: bold;
-    }
+        h1, h2 {
+            color: #b30000;
+        }
 
-    .navbar a:hover {
-      text-decoration: underline;
-    }
-  </style>
+        table {
+            margin-bottom: 40px;
+        }
+    </style>
 </head>
 
 <body>
 
-  <!-- Global Navigation Bar -->
-  <nav class="navbar">
-    <a href="index.html">Home</a>
-    <a href="career.html">Career Leaders</a>
-    <a href="seasons/index.html">Seasons</a>
-    <a href="players/player.html?id=1">Player Pages</a>
-  </nav>
+    <!-- UNIVERSAL NAV BAR -->
+    <nav>
+        <a href="/philliesphantasycamp/index.html">Home</a>
+        <a href="/philliesphantasycamp/career.html">Career Leaders</a>
+        <a href="/philliesphantasycamp/seasons/index.html">Seasons</a>
+        <a href="/philliesphantasycamp/players/player.html?id=1">Player Pages</a>
+    </nav>
 
-  <h2>Career Hitting Leaders</h2>
-  <table id="careerHitting"></table>
+    <h1>Career Leaders</h1>
 
-  <h2>Career Pitching Leaders</h2>
-  <table id="careerPitching"></table>
+    <h2>Career Hitting Leaders</h2>
+    <table id="careerHitting" class="display">
+        <thead>
+            <tr>
+                <th>Player</th>
+                <th>AB</th>
+                <th>H</th>
+                <th>R</th>
+                <th>RBI</th>
+                <th>2B</th>
+                <th>3B</th>
+                <th>HR</th>
+                <th>AVG</th>
+            </tr>
+        </thead>
+    </table>
 
-  <!-- jQuery + DataTables JS -->
-  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <h2>Career Pitching Leaders</h2>
+    <table id="careerPitching" class="display">
+        <thead>
+            <tr>
+                <th>Player</th>
+                <th>IP</th>
+                <th>K</th>
+                <th>W</th>
+                <th>S</th>
+                <th>BB</th>
+                <th>R</th>
+                <th>H</th>
+                <th>ERA</th>
+                <th>WHIP</th>
+            </tr>
+        </thead>
+    </table>
 
-  <!-- Your unified career.js -->
-  <script src="js/career.js"></script>
-
-  <script>
-    // Load Career Hitting Table
-    loadHittingCSV("data/hittingcareer_normalized.csv", "careerHitting", 4);
-
-    // Load Career Pitching Table
-    loadPitchingCSV("data/pitchingcareer_normalized.csv", "careerPitching", 5);
-  </script>
+    <!-- Career JS -->
+    <script src="/philliesphantasycamp/js/career.js"></script>
 
 </body>
 </html>
