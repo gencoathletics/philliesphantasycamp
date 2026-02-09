@@ -19,11 +19,15 @@ function buildSeasonHittingTable(rows, season) {
         destroy: true,
         columns: [
             {
+                title: "Player",
                 data: null,
                 render: function (row) {
                     return `<a href="../players/${row["PLAYER ID"]}.html">${row["FIRST NAME"]} ${row["LAST NAME"]}</a>`;
-                }
+                },
+                orderData: [1, 2]   // sort by LAST NAME then FIRST NAME
             },
+            { data: "LAST NAME" },   // hidden
+            { data: "FIRST NAME" },  // hidden
             { data: "AB" },
             { data: "H" },
             { data: "R" },
@@ -33,7 +37,14 @@ function buildSeasonHittingTable(rows, season) {
             { data: "HR" },
             { data: "AVG" }
         ],
-        order: [[8, "desc"]]
+        columnDefs: [
+            {
+                targets: [1, 2],   // hide LAST NAME + FIRST NAME
+                visible: false,
+                searchable: false
+            }
+        ],
+        order: [[0, "asc"]]
     });
 }
 
@@ -46,11 +57,15 @@ function buildSeasonPitchingTable(rows, season) {
         destroy: true,
         columns: [
             {
+                title: "Player",
                 data: null,
                 render: function (row) {
                     return `<a href="../players/${row["PLAYER ID"]}.html">${row["FIRST NAME"]} ${row["LAST NAME"]}</a>`;
-                }
+                },
+                orderData: [1, 2]   // sort by LAST NAME then FIRST NAME
             },
+            { data: "LAST NAME" },   // hidden
+            { data: "FIRST NAME" },  // hidden
             { data: "IP" },
             { data: "K" },
             { data: "W" },
@@ -61,7 +76,14 @@ function buildSeasonPitchingTable(rows, season) {
             { data: "ERA" },
             { data: "WHIP" }
         ],
-        order: [[8, "asc"]] // ERA ascending
+        columnDefs: [
+            {
+                targets: [1, 2],   // hide LAST NAME + FIRST NAME
+                visible: false,
+                searchable: false
+            }
+        ],
+        order: [[9, "asc"]]   // ERA ascending
     });
 }
 
