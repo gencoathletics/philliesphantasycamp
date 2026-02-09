@@ -1,183 +1,72 @@
-// -------------------------------
-// Normalize CSV keys (fixes BOM, spaces, casing)
-// -------------------------------
-function normalizeRow(row) {
-    const clean = {};
-    for (const key in row) {
-        if (!key) continue;
-        const newKey = key.trim().toUpperCase();
-        clean[newKey] = row[key];
-    }
-    return clean;
-}
-
-// -------------------------------
-// Get season from URL
-// -------------------------------
-function getSeasonFromURL() {
-    const file = window.location.pathname.split("/").pop();
-    return file.replace(".html", "");
-}
-
-// -------------------------------
-// Load Hitting CSV
-// -------------------------------
-function loadSeasonHittingCSV(csvPath, tableId, season) {
-    fetch(csvPath)
-        .then(r => r.text())
-        .then(text => {
-            const parsed = Papa.parse(text, { header: true }).data;
-
-            const rows = parsed.map(normalizeRow);
-            const filtered = rows.filter(r => r["SEASON"] == season);
-
-            $(`#${tableId}`).DataTable({
-                data: filtered,
-                columns: [
-                    {
-                        title: "Player",
-                        data: null,
-                        render: function (data, type, row) {
-                            const id = row["PLAYER ID"];
-                            const first = row["FIRST NAME"];
-                            const last = row["LAST NAME"];
-                            const full = `${first} ${last}`;
-                            return `<a href="../players/player.html?id=${id}">${full}</a>`;
-                        },
-                        orderData: [3, 2] // sort by LAST NAME then FIRST NAME
-                    },
-                    { title: "PLAYER ID", data: "PLAYER ID" },   // hidden
-                    { title: "FIRST NAME", data: "FIRST NAME" }, // hidden
-                    { title: "LAST NAME", data: "LAST NAME" },   // hidden
-                    { title: "AB", data: "AB" },
-                    { title: "H", data: "H" },
-                    { title: "R", data: "R" },
-                    { title: "RBI", data: "RBI" },
-                    { title: "2B", data: "2B" },
-                    { title: "3B", data: "3B" },
-                    { title: "HR", data: "HR" },
-                    { title: "BB", data: "BB" },
-                    { title: "AVG", data: "AVG" }
-                ],
-                columnDefs: [
-                    { targets: [1, 2, 3], visible: false, searchable: false }
-                    // 1 = PLAYER ID, 2 = FIRST NAME, 3 = LAST NAME (all hidden)
-                ],
-                paging: false,
-                searching: false,
-                info: false,
-                order: [[0, "asc"]]
-            });
-        });
-}
-
-// -------------------------------
-// Load Pitching CSV
-// -------------------------------
-function loadSeasonPitchingCSV(csvPath, tableId, season) {
-    fetch(csvPath)
-        .then(r => r.text())
-        .then(text => {
-            const parsed = Papa.parse(text, { header: true }).data;
-
-            const rows = parsed.map(normalizeRow);
-            const filtered = rows.filter(r => r["SEASON"] == season);
-
-            $(`#${tableId}`).DataTable({
-                data: filtered,
-                columns: [
-                    {
-                        title: "Player",
-                        data: null,
-                        render: function (data, type, row) {
-                            const id = row["PLAYER ID"];
-                            const first = row["FIRST NAME"];
-                            const last = row["LAST NAME"];
-                            const full = `${first} ${last}`;
-                            return `<a href="../players/player.html?id=${id}">${full}</a>`;
-                        },
-                        orderData: [3, 2] // sort by LAST NAME then FIRST NAME
-                    },
-                    { title: "PLAYER ID", data: "PLAYER ID" },   // hidden
-                    { title: "FIRST NAME", data: "FIRST NAME" }, // hidden
-                    { title: "LAST NAME", data: "LAST NAME" },   // hidden
-                    { title: "IP", data: "IP" },
-                    { title: "K", data: "K" },
-                    { title: "W", data: "W" },
-                    { title: "S", data: "S" },
-                    { title: "BB", data: "BB" },
-                    { title: "R", data: "R" },
-                    { title: "H", data: "H" },
-                    { title: "ERA", data: "ERA" },
-                    { title: "WHIP", data: "WHIP" }
-                ],
-                columnDefs: [
-                    { targets: [1, 2, 3], visible: false, searchable: false }
-                    // 1 = PLAYER ID, 2 = FIRST NAME, 3 = LAST NAME (all hidden)
-                ],
-                paging: false,
-                searching: false,
-                info: false,
-                order: [[0, "asc"]]
-            });
-        });
-}
-
-// -------------------------------
-// Populate season dropdown
-// -------------------------------
-function populateSeasonDropdown(currentSeason) {
-    const dropdown = document.getElementById("seasonDropdown");
-
-    const seasons = [
-        "2026","2025","2024","2023","2022",
-        "2020","2019","2018","2017","2016",
-        "2015","2014","2013","2012","2011",
-        "2010","2009"
-    ];
-
-    seasons.forEach(season => {
-        const option = document.createElement("option");
-        option.value = `${season}.html`;
-        option.textContent = season;
-        if (season == currentSeason) option.selected = true;
-        dropdown.appendChild(option);
-    });
-
-    dropdown.addEventListener("change", () => {
-        window.location.href = dropdown.value;
+// Load CSV helper
+function loadCSV(path, callback) {
+    Papa.parse(path, {
+        download: true,
+        header: true,
+        dynamicTyping: true,
+        complete: function (results) {
+            callback(results.data);
+        }
     });
 }
 
-// -------------------------------
-// Prev/Next links
-// -------------------------------
-function buildPrevNextLinks(currentSeason) {
-    const seasonNum = parseInt(currentSeason);
+// Build Hitting Table
+function buildSeasonHittingTable(rows, season) {
+    const filtered = rows.filter(r => r.SEASON == season);
 
-    const prev = document.getElementById("prevSeason");
-    const next = document.getElementById("nextSeason");
-
-    if (prev) {
-        prev.href = `${seasonNum - 1}.html`;
-        prev.textContent = `← ${seasonNum - 1} Season`;
-    }
-
-    if (next) {
-        next.href = `${seasonNum + 1}.html`;
-        next.textContent = `${seasonNum + 1} Season →`;
-    }
+    $('#seasonHitting').DataTable({
+        data: filtered,
+        destroy: true,
+        columns: [
+            {
+                data: null,
+                render: function (row) {
+                    return `<a href="../players/${row["PLAYER ID"]}.html">${row["FIRST NAME"]} ${row["LAST NAME"]}</a>`;
+                }
+            },
+            { data: "AB" },
+            { data: "H" },
+            { data: "R" },
+            { data: "RBI" },
+            { data: "2B" },
+            { data: "3B" },
+            { data: "HR" },
+            { data: "AVG" }
+        ],
+        order: [[8, "desc"]]
+    });
 }
 
-// -------------------------------
-// Initialize
-// -------------------------------
-document.addEventListener("DOMContentLoaded", () => {
-    const season = getSeasonFromURL();
+// Build Pitching Table
+function buildSeasonPitchingTable(rows, season) {
+    const filtered = rows.filter(r => r.SEASON == season);
 
-    loadSeasonHittingCSV("../data/hitting_normalized.csv", "seasonHitting", season);
-    loadSeasonPitchingCSV("../data/pitching_normalized.csv", "seasonPitching", season);
+    $('#seasonPitching').DataTable({
+        data: filtered,
+        destroy: true,
+        columns: [
+            {
+                data: null,
+                render: function (row) {
+                    return `<a href="../players/${row["PLAYER ID"]}.html">${row["FIRST NAME"]} ${row["LAST NAME"]}</a>`;
+                }
+            },
+            { data: "IP" },
+            { data: "K" },
+            { data: "W" },
+            { data: "S" },
+            { data: "BB" },
+            { data: "R" },
+            { data: "H" },
+            { data: "ERA" },
+            { data: "WHIP" }
+        ],
+        order: [[8, "asc"]] // ERA ascending
+    });
+}
 
-    populateSeasonDropdown(season);
-    buildPrevNextLinks(season);
-});
+// Main loader
+function loadSeason(season) {
+    loadCSV("../data/hitting_normalized.csv", data => buildSeasonHittingTable(data, season));
+    loadCSV("../data/pitching_normalized.csv", data => buildSeasonPitchingTable(data, season));
+}
