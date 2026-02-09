@@ -20,7 +20,7 @@ function buildCareerHittingTable(rows) {
                 title: "Player",
                 data: null,
                 render: function (row) {
-                    return `<a href="players/${row["PLAYER ID"]}.html">${row["FIRST NAME"]} ${row["LAST NAME"]}</a>`;
+                    return `<a href="/philliesphantasycamp/players/${row["PLAYER ID"]}.html">${row["FIRST NAME"]} ${row["LAST NAME"]}</a>`;
                 }
             },
             { data: "AB" },
@@ -46,7 +46,7 @@ function buildCareerPitchingTable(rows) {
                 title: "Player",
                 data: null,
                 render: function (row) {
-                    return `<a href="players/${row["PLAYER ID"]}.html">${row["FIRST NAME"]} ${row["LAST NAME"]}</a>`;
+                    return `<a href="/philliesphantasycamp/players/${row["PLAYER ID"]}.html">${row["FIRST NAME"]} ${row["LAST NAME"]}</a>`;
                 }
             },
             { data: "IP" },
@@ -65,8 +65,8 @@ function buildCareerPitchingTable(rows) {
 
 // Main loader
 function loadCareer() {
-    loadCSV("data/hittingcareer_normalized.csv", buildCareerHittingTable);
-    loadCSV("data/pitchingcareer_normalized.csv", buildCareerPitchingTable);
+    loadCSV("/philliesphantasycamp/data/hittingcareer_normalized.csv", buildCareerHittingTable);
+    loadCSV("/philliesphantasycamp/data/pitchingcareer_normalized.csv", buildCareerPitchingTable);
 }
 
 // Run on page load
