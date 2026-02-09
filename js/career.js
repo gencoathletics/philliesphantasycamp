@@ -10,6 +10,23 @@ function loadCSV(path, callback) {
     });
 }
 
+// Helper to build a sort key: "LAST FIRST"
+function sortKey(row) {
+    return `${row["LAST NAME"]} ${row["FIRST NAME"]}`.toUpperCase();
+}
+
+// Format AVG to 3 decimals
+function formatAVG(value) {
+    if (value === null || value === undefined || value === "") return "";
+    return Number(value).toFixed(3);
+}
+
+// Format ERA/WHIP to 2 decimals
+function format2(value) {
+    if (value === null || value === undefined || value === "") return "";
+    return Number(value).toFixed(2);
+}
+
 // Build Career Hitting Table
 function buildCareerHittingTable(rows) {
     $('#careerHitting').DataTable({
@@ -19,7 +36,10 @@ function buildCareerHittingTable(rows) {
             {
                 title: "Player",
                 data: null,
-                render: function (row) {
+                render: function (row, type) {
+                    if (type === "sort") {
+                        return sortKey(row);   // hidden sort key
+                    }
                     return `<a href="/philliesphantasycamp/players/${row["PLAYER ID"]}.html">${row["FIRST NAME"]} ${row["LAST NAME"]}</a>`;
                 }
             },
@@ -30,7 +50,12 @@ function buildCareerHittingTable(rows) {
             { data: "2B" },
             { data: "3B" },
             { data: "HR" },
-            { data: "AVG" }
+            {
+                data: "AVG",
+                render: function (value) {
+                    return formatAVG(value);
+                }
+            }
         ],
         order: [[0, "asc"]]
     });
@@ -45,7 +70,10 @@ function buildCareerPitchingTable(rows) {
             {
                 title: "Player",
                 data: null,
-                render: function (row) {
+                render: function (row, type) {
+                    if (type === "sort") {
+                        return sortKey(row);   // hidden sort key
+                    }
                     return `<a href="/philliesphantasycamp/players/${row["PLAYER ID"]}.html">${row["FIRST NAME"]} ${row["LAST NAME"]}</a>`;
                 }
             },
@@ -56,10 +84,20 @@ function buildCareerPitchingTable(rows) {
             { data: "BB" },
             { data: "R" },
             { data: "H" },
-            { data: "ERA" },
-            { data: "WHIP" }
+            {
+                data: "ERA",
+                render: function (value) {
+                    return format2(value);
+                }
+            },
+            {
+                data: "WHIP",
+                render: function (value) {
+                    return format2(value);
+                }
+            }
         ],
-        order: [[9, "asc"]]   // ERA ascending
+        order: [[0, "asc"]]
     });
 }
 
