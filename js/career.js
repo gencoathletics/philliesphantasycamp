@@ -17,6 +17,7 @@ function buildCareerHittingTable(rows) {
         destroy: true,
         columns: [
             {
+                title: "Player",
                 data: null,
                 render: function (row) {
                     return `<a href="players/${row["PLAYER ID"]}.html">${row["FIRST NAME"]} ${row["LAST NAME"]}</a>`;
@@ -31,7 +32,7 @@ function buildCareerHittingTable(rows) {
             { data: "HR" },
             { data: "AVG" }
         ],
-        order: [[8, "desc"]]
+        order: [[0, "asc"]]
     });
 }
 
@@ -42,6 +43,7 @@ function buildCareerPitchingTable(rows) {
         destroy: true,
         columns: [
             {
+                title: "Player",
                 data: null,
                 render: function (row) {
                     return `<a href="players/${row["PLAYER ID"]}.html">${row["FIRST NAME"]} ${row["LAST NAME"]}</a>`;
@@ -57,7 +59,7 @@ function buildCareerPitchingTable(rows) {
             { data: "ERA" },
             { data: "WHIP" }
         ],
-        order: [[8, "asc"]] // ERA ascending
+        order: [[9, "asc"]]   // ERA ascending
     });
 }
 
@@ -66,3 +68,6 @@ function loadCareer() {
     loadCSV("data/hittingcareer_normalized.csv", buildCareerHittingTable);
     loadCSV("data/pitchingcareer_normalized.csv", buildCareerPitchingTable);
 }
+
+// Run on page load
+loadCareer();
