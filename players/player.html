@@ -1,105 +1,130 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Player Profile</title>
+    <meta charset="UTF-8">
+    <title>Player Profile</title>
 
-  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <!-- DataTables + jQuery -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 40px;
-      background: #f7f7f7;
-    }
-    h1 {
-      margin-bottom: 5px;
-    }
-    h2 {
-      margin-top: 40px;
-      color: #b30000;
-    }
-    .player-header {
-      margin-bottom: 30px;
-    }
-  </style>
+    <!-- PapaParse -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+
+    <!-- Player JS -->
+    <script src="../js/player.js"></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h1 {
+            margin-bottom: 5px;
+        }
+
+        h2 {
+            margin-top: 40px;
+            margin-bottom: 10px;
+        }
+
+        table.dataTable {
+            width: 100% !important;
+            margin-bottom: 40px;
+        }
+
+        .section {
+            margin-top: 40px;
+        }
+    </style>
 </head>
 
-<body>
+<body onload="loadPlayerPage()">
 
-<div class="player-header">
-  <h1 id="playerName"></h1>
-  <div id="playerID"></div>
-</div>
+    <!-- Player Name Header -->
+    <h1 id="playerName">Loading...</h1>
 
-<h2>Career Statistics</h2>
-<table id="careerTable" class="display"></table>
+    <!-- Season Hitting -->
+    <div class="section">
+        <h2>Season Hitting</h2>
+        <table id="playerHitting" class="display">
+            <thead>
+                <tr>
+                    <th>Season</th>
+                    <th>AB</th>
+                    <th>H</th>
+                    <th>R</th>
+                    <th>RBI</th>
+                    <th>2B</th>
+                    <th>3B</th>
+                    <th>HR</th>
+                    <th>AVG</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
 
-<h2>Season-by-Season Statistics</h2>
-<table id="seasonTable" class="display"></table>
+    <!-- Season Pitching -->
+    <div class="section">
+        <h2>Season Pitching</h2>
+        <table id="playerPitching" class="display">
+            <thead>
+                <tr>
+                    <th>Season</th>
+                    <th>IP</th>
+                    <th>K</th>
+                    <th>W</th>
+                    <th>S</th>
+                    <th>BB</th>
+                    <th>R</th>
+                    <th>H</th>
+                    <th>ERA</th>
+                    <th>WHIP</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
 
-<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <!-- Career Hitting -->
+    <div class="section">
+        <h2>Career Hitting</h2>
+        <table id="playerCareerHitting" class="display">
+            <thead>
+                <tr>
+                    <th>AB</th>
+                    <th>H</th>
+                    <th>R</th>
+                    <th>RBI</th>
+                    <th>2B</th>
+                    <th>3B</th>
+                    <th>HR</th>
+                    <th>AVG</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
 
-<script>
-// Get player ID from URL: players/player.html?id=862
-const urlParams = new URLSearchParams(window.location.search);
-const playerID = urlParams.get("id");
-
-// Display ID
-document.getElementById("playerID").innerText = "Player ID: " + playerID;
-
-// Load CSV helper
-function loadCSV(url) {
-  return fetch(url)
-    .then(r => r.text())
-    .then(text => text.trim().split("\n").map(row => row.split(",")));
-}
-
-// Load career + season data
-Promise.all([
-  loadCSV("../data/hittingcareer_normalized.csv"),
-  loadCSV("../data/hitting_normalized.csv")
-]).then(([careerData, seasonData]) => {
-
-  // Extract headers
-  const careerHeaders = careerData[0];
-  const seasonHeaders = seasonData[0];
-
-  // Filter for this player
-  const careerRow = careerData.find(r => r[0] === playerID);
-  const seasonRows = seasonData.filter(r => r[0] === playerID);
-
-  // Set player name
-  if (careerRow) {
-    const first = careerRow[1];
-    const last = careerRow[2];
-    document.getElementById("playerName").innerText = first + " " + last;
-  }
-
-  // Build career table
-  if (careerRow) {
-    const careerHTML = `
-      <thead><tr>${careerHeaders.map(h => `<th>${h}</th>`).join("")}</tr></thead>
-      <tbody><tr>${careerRow.map(c => `<td>${c}</td>`).join("")}</tr></tbody>
-    `;
-    document.getElementById("careerTable").innerHTML = careerHTML;
-    new DataTable("#careerTable");
-  }
-
-  // Build season table
-  if (seasonRows.length > 0) {
-    const seasonHTML = `
-      <thead><tr>${seasonHeaders.map(h => `<th>${h}</th>`).join("")}</tr></thead>
-      <tbody>
-        ${seasonRows.map(r => `<tr>${r.map(c => `<td>${c}</td>`).join("")}</tr>`).join("")}
-      </tbody>
-    `;
-    document.getElementById("seasonTable").innerHTML = seasonHTML;
-    new DataTable("#seasonTable");
-  }
-});
-</script>
+    <!-- Career Pitching -->
+    <div class="section">
+        <h2>Career Pitching</h2>
+        <table id="playerCareerPitching" class="display">
+            <thead>
+                <tr>
+                    <th>IP</th>
+                    <th>K</th>
+                    <th>W</th>
+                    <th>S</th>
+                    <th>BB</th>
+                    <th>R</th>
+                    <th>H</th>
+                    <th>ERA</th>
+                    <th>WHIP</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
 
 </body>
 </html>
