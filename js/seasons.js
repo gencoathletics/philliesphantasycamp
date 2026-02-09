@@ -67,8 +67,29 @@ function buildSeasonPitchingTable(rows, season) {
     });
 }
 
+// Populate the Jump-to-Season dropdown
+function populateSeasonDropdown() {
+    const dropdown = document.getElementById("seasonDropdown");
+
+    for (let year = 2009; year <= 2026; year++) {
+        const option = document.createElement("option");
+        option.value = year;
+        option.textContent = year;
+        dropdown.appendChild(option);
+    }
+
+    dropdown.addEventListener("change", function () {
+        if (this.value) {
+            window.location.href = `${this.value}.html`;
+        }
+    });
+}
+
 // Main loader
 function loadSeason(season) {
     loadCSV("../data/hitting_normalized.csv", data => buildSeasonHittingTable(data, season));
     loadCSV("../data/pitching_normalized.csv", data => buildSeasonPitchingTable(data, season));
 }
+
+// Initialize dropdown on page load
+populateSeasonDropdown();
