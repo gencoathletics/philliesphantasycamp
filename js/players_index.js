@@ -23,7 +23,7 @@ Papa.parse("/philliesphantasycamp/data/hittingcareer_normalized.csv", {
         const list = document.getElementById("playerList");
         playerArray.forEach(p => {
             const li = document.createElement("li");
-            li.innerHTML = `<a class="playerLink" href="player.html?id=${p.id}">${p.first} ${p.last}</a>`;
+            li.innerHTML = `<a class="playerLink" href="/philliesphantasycamp/players/player.html?id=${p.id}">${p.first} ${p.last}</a>`;
             list.appendChild(li);
         });
 
