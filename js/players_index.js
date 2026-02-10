@@ -1,11 +1,9 @@
-// Load players from hittingcareer_normalized.csv (contains all players)
 Papa.parse("/philliesphantasycamp/data/hittingcareer_normalized.csv", {
     download: true,
     header: true,
     complete: function(results) {
         const data = results.data;
 
-        // Extract unique players
         const players = {};
         data.forEach(row => {
             if (row.PLAYERID && row.FIRST && row.LAST) {
@@ -17,13 +15,11 @@ Papa.parse("/philliesphantasycamp/data/hittingcareer_normalized.csv", {
             }
         });
 
-        // Convert to array + sort by last name
         const playerArray = Object.values(players).sort((a, b) => {
             if (a.last === b.last) return a.first.localeCompare(b.first);
             return a.last.localeCompare(b.last);
         });
 
-        // Render list
         const list = document.getElementById("playerList");
         playerArray.forEach(p => {
             const li = document.createElement("li");
@@ -31,7 +27,6 @@ Papa.parse("/philliesphantasycamp/data/hittingcareer_normalized.csv", {
             list.appendChild(li);
         });
 
-        // Search filter
         document.getElementById("searchBox").addEventListener("input", function() {
             const term = this.value.toLowerCase();
             const items = list.getElementsByTagName("li");
