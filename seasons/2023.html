@@ -1,84 +1,76 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>2023 Season Leaders</title>
+    <title>2023 Season - Phillies Phantasy Camp</title>
 
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
-    <script src="../js/seasons.js"></script>
 
     <style>
         body { font-family: Arial, sans-serif; margin: 20px; }
-        h1 { margin-bottom: 10px; color: #b30000; }
-        h2 { margin-top: 40px; margin-bottom: 10px; }
-        table.dataTable { width: 100% !important; margin-bottom: 40px; }
-        nav { background-color: #8b0000; padding: 10px; }
+        nav { background-color: #8b0000; padding: 10px; margin-bottom: 20px; }
         nav a { color: white; margin-right: 20px; text-decoration: none; font-weight: bold; }
-        #seasonDropdown { margin-top: 20px; margin-bottom: 20px; padding: 5px; }
+        h1, h2 { color: #b30000; }
+        table { margin-bottom: 40px; }
+        #seasonSelect { margin-left: 10px; padding: 4px; font-size: 14px; }
     </style>
 </head>
 
 <body>
 
     <nav>
-        <a href="../index.html">Home</a>
-        <a href="../career.html">Career Leaders</a>
-        <a href="../seasons/2026.html">Seasons</a>
-        <a href="../players/player.html?id=1">Player Pages</a>
+        <a href="/philliesphantasycamp/index.html">Home</a>
+        <a href="/philliesphantasycamp/career.html">Career Leaders</a>
+        <a href="/philliesphantasycamp/seasons/index.html">Seasons</a>
+        <a href="/philliesphantasycamp/players/player.html?id=1">Player Pages</a>
     </nav>
 
-    <select id="seasonDropdown">
-        <option value="">Jump to a Season</option>
+    <h1>2023 Season</h1>
+
+    <label for="seasonSelect"><strong>Jump to Season:</strong></label>
+    <select id="seasonSelect" onchange="location.href=this.value;">
+        <option value="2026.html">2026</option>
+        <option value="2025.html">2025</option>
+        <option value="2024.html">2024</option>
+        <option value="2023.html" selected>2023</option>
+        <option value="2022.html">2022</option>
+        <option value="2020.html">2020</option>
+        <option value="2019.html">2019</option>
+        <option value="2018.html">2018</option>
+        <option value="2017.html">2017</option>
+        <option value="2016.html">2016</option>
+        <option value="2015.html">2015</option>
+        <option value="2014.html">2014</option>
+        <option value="2013.html">2013</option>
+        <option value="2012.html">2012</option>
+        <option value="2011.html">2011</option>
+        <option value="2010.html">2010</option>
+        <option value="2009.html">2009</option>
     </select>
 
-    <h1>2023 Season Leaders</h1>
-
-    <h2>Hitting Leaders</h2>
+    <h2>Hitting</h2>
     <table id="seasonHitting" class="display">
         <thead>
             <tr>
-                <th>Player</th>
-                <th style="display:none;"></th> <!-- LAST NAME -->
-                <th style="display:none;"></th> <!-- FIRST NAME -->
-                <th>AB</th>
-                <th>H</th>
-                <th>R</th>
-                <th>RBI</th>
-                <th>2B</th>
-                <th>3B</th>
-                <th>HR</th>
-                <th>AVG</th>
+                <th>Player</th><th>AB</th><th>H</th><th>R</th><th>RBI</th><th>2B</th><th>3B</th><th>HR</th><th>AVG</th>
             </tr>
         </thead>
     </table>
 
-    <h2>Pitching Leaders</h2>
+    <h2>Pitching</h2>
     <table id="seasonPitching" class="display">
         <thead>
             <tr>
-                <th>Player</th>
-                <th style="display:none;"></th> <!-- LAST NAME -->
-                <th style="display:none;"></th> <!-- FIRST NAME -->
-                <th>IP</th>
-                <th>K</th>
-                <th>W</th>
-                <th>S</th>
-                <th>BB</th>
-                <th>R</th>
-                <th>H</th>
-                <th>ERA</th>
-                <th>WHIP</th>
+                <th>Player</th><th>IP</th><th>K</th><th>W</th><th>S</th><th>BB</th><th>R</th><th>H</th><th>ERA</th><th>WHIP</th>
             </tr>
         </thead>
     </table>
 
-    <script>
-        loadSeason("2023");
-    </script>
+    <script src="/philliesphantasycamp/js/seasons.js"></script>
+    <script> loadSeason(2023); </script>
 
 </body>
 </html>
