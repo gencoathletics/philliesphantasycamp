@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Player Directory - Phillies Phantasy Camp</title>
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        nav { background-color: #8b0000; padding: 10px; margin-bottom: 20px; }
+        nav a { color: white; margin-right: 20px; text-decoration: none; font-weight: bold; }
+        h1 { color: #b30000; }
+        #searchBox { width: 300px; padding: 8px; font-size: 16px; margin-bottom: 20px; }
+        ul { list-style: none; padding: 0; }
+        li { margin: 6px 0; }
+        a.playerLink { text-decoration: none; color: #8b0000; font-weight: bold; }
+        a.playerLink:hover { text-decoration: underline; }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <a href="/philliesphantasycamp/index.html">Home</a>
+        <a href="/philliesphantasycamp/career.html">Career Leaders</a>
+        <a href="/philliesphantasycamp/seasons/index.html">Seasons</a>
+        <a href="/philliesphantasycamp/players/index.html">Player Pages</a>
+    </nav>
+
+    <h1>Player Directory</h1>
+
+    <input type="text" id="searchBox" placeholder="Search players by name...">
+
+    <ul id="playerList"></ul>
+
+    <script src="/philliesphantasycamp/js/players.js"></script>
+
+</body>
+</html>
