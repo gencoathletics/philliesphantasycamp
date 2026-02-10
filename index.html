@@ -2,18 +2,20 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Home - Phillies Phantasy Camp Stats</title>
+    <title>Phillies Phantasy Camp Stats</title>
 
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
+            text-align: center;
         }
 
         nav {
             background-color: #8b0000;
-            padding: 10px;
-            margin-bottom: 20px;
+            padding: 12px;
+            margin-bottom: 30px;
+            text-align: left;
         }
 
         nav a {
@@ -25,13 +27,26 @@
 
         h1 {
             color: #b30000;
+            margin-top: 10px;
+        }
+
+        #logo {
+            max-width: 220px;
+            margin-bottom: 20px;
+        }
+
+        .content {
+            max-width: 700px;
+            margin: 0 auto;
+            font-size: 18px;
+            line-height: 1.6;
         }
     </style>
 </head>
 
 <body>
 
-    <!-- UNIVERSAL NAV BAR -->
+    <!-- NAV BAR -->
     <nav>
         <a href="/philliesphantasycamp/index.html">Home</a>
         <a href="/philliesphantasycamp/career.html">Career Leaders</a>
@@ -39,9 +54,15 @@
         <a href="/philliesphantasycamp/players/player.html?id=1">Player Pages</a>
     </nav>
 
+    <!-- LOGO (make sure logo.png is in /images/) -->
+    <img id="logo" src="images/logo.png" alt="Phillies Phantasy Camp Logo">
+
     <h1>Phillies Phantasy Camp Stats</h1>
-    <p>Welcome to the official statistics site for Phillies Phantasy Camp.</p>
-    <p>Use the navigation above to explore seasons, player pages, and career leaders.</p>
+
+    <div class="content">
+        <p>Welcome to the official statistics site for Phillies Phantasy Camp.</p>
+        <p>Use the navigation above to explore seasons, player pages, and career leaders.</p>
+    </div>
 
 </body>
 </html>
