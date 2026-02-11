@@ -13,11 +13,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const PATH = "/philliesphantasycamp/data/";
 
     const FILES = {
-        seasonHitting: PATH + "hittingseason_normalized.csv",
-        seasonPitching: PATH + "pitchingseason_normalized.csv",
-        careerHitting: PATH + "hittingcareer_normalized.csv",
-        careerPitching: PATH + "pitchingcareer_normalized.csv"
-    };
+    seasonHitting: "/philliesphantasycamp/data/hittingseason_normalized.csv",
+    seasonPitching: "/philliesphantasycamp/data/pitchingseason_normalized.csv",
+    careerHitting: "/philliesphantasycamp/data/hittingcareer_normalized.csv",
+    careerPitching: "/philliesphantasycamp/data/pitchingcareer_normalized.csv"
+};
 
     // DOM TARGETS
     const nameEl = document.getElementById("playerName");
