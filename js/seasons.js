@@ -1,180 +1,92 @@
-// Load CSV helper
-function loadCSV(path, callback) {
-    Papa.parse(path, {
-        download: true,
-        header: true,
-        dynamicTyping: false,   // keep IP as text like "99 2/3"
-        complete: function (results) {
-            callback(results.data);
-        }
-    });
-}
+console.log(">>> SEASONS.JS VERSION 3 <<<");
 
-// Build PLAYER sort key: "LAST FIRST"
-function buildPlayerSortKey(row) {
-    return `${row["LAST NAME"].trim().toUpperCase()} ${row["FIRST NAME"].trim().toUpperCase()}`;
-}
+document.addEventListener("DOMContentLoaded", function () {
 
-// Convert baseball IP stored as "99 2/3" into a sortable number
-function convertFractionIP(ipString) {
-    if (!ipString || typeof ipString !== "string") return 0;
+    // Determine which season page we are on
+    const season = document.body.getAttribute("data-season");
 
-    const parts = ipString.trim().split(" ");
-
-    if (parts.length === 1) {
-        const wholeOnly = Number(parts[0]);
-        return isNaN(wholeOnly) ? 0 : wholeOnly;
+    if (!season) {
+        console.error("No season found in data-season attribute");
+        return;
     }
 
-    const whole = Number(parts[0]);
-    const fraction = parts[1]; // e.g. "2/3"
+    const PATH = "/philliesphantasycamp/data/";
 
-    const fracParts = fraction.split("/");
-    if (fracParts.length !== 2) return isNaN(whole) ? 0 : whole;
+    const FILES = {
+        hitting: PATH + "hitting_normalized.csv",
+        pitching: PATH + "pitching_normalized.csv"
+    };
 
-    const num = Number(fracParts[0]);
-    const den = Number(fracParts[1]);
+    const hitBody = document.getElementById("hittingBody");
+    const pitchBody = document.getElementById("pitchingBody");
 
-    if (isNaN(whole) || isNaN(num) || isNaN(den) || den === 0) {
-        return isNaN(whole) ? 0 : whole;
+    function loadCSV(url, callback) {
+        Papa.parse(url, {
+            download: true,
+            header: true,
+            complete: function (results) {
+                callback(results.data);
+            }
+        });
     }
 
-    return whole + (num / den);
-}
+    function addRow(tbody, row, fields) {
+        const tr = document.createElement("tr");
+        fields.forEach(f => {
+            const td = document.createElement("td");
+            td.textContent = row[f] || "";
+            tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+    }
 
-// Format AVG to 3 decimals
-function formatAVG(value) {
-    if (!value) return "";
-    return Number(value).toFixed(3);
-}
+    // HITTING TABLE
+    loadCSV(FILES.hitting, data => {
+        data.forEach(row => {
+            if (row["SEASON"] === season) {
 
-// Format ERA/WHIP to 2 decimals
-function format2(value) {
-    if (!value) return "";
-    return Number(value).toFixed(2);
-}
+                const tr = document.createElement("tr");
 
-// Build Season Hitting Table
-function buildSeasonHittingTable(rows) {
-    // Add PLAYER_SORT
-    rows.forEach(row => {
-        row.PLAYER_SORT = buildPlayerSortKey(row);
-    });
+                // Player name links to player page
+                const playerCell = document.createElement("td");
+                const id = row["PLAYER ID"];
+                const name = row["PLAYER"];
+                playerCell.innerHTML = `<a href="/philliesphantasycamp/players/player.html?id=${id}">${name}</a>`;
+                tr.appendChild(playerCell);
 
-    $('#seasonHitting').DataTable({
-        data: rows,
-        destroy: true,
-        columns: [
-            {
-                title: "Player",
-                data: null,
-                render: function (row, type) {
-                    if (type === "sort") return row.PLAYER_SORT;
-                    return `<a href="/philliesphantasycamp/players/${row["PLAYER ID"]}.html">${row["FIRST NAME"]} ${row["LAST NAME"]}</a>`;
-                }
-            },
-            { data: "AB" },
-            { data: "H" },
-            { data: "R" },
-            { data: "RBI" },
-            { data: "2B" },
-            { data: "3B" },
-            { data: "HR" },
-            {
-                data: "AVG",
-                render: function (value) {
-                    return formatAVG(value);
-                }
-            },
-            {
-                data: "PLAYER_SORT",
-                visible: false,
-                searchable: false
+                ["AB","H","R","RBI","2B","3B","HR","AVG"].forEach(f => {
+                    const td = document.createElement("td");
+                    td.textContent = row[f] || "";
+                    tr.appendChild(td);
+                });
+
+                hitBody.appendChild(tr);
             }
-        ],
-        columnDefs: [
-            {
-                targets: 0,
-                orderData: [9]   // use PLAYER_SORT
+        });
+    });
+
+    // PITCHING TABLE
+    loadCSV(FILES.pitching, data => {
+        data.forEach(row => {
+            if (row["SEASON"] === season) {
+
+                const tr = document.createElement("tr");
+
+                const playerCell = document.createElement("td");
+                const id = row["PLAYER ID"];
+                const name = row["PLAYER"];
+                playerCell.innerHTML = `<a href="/philliesphantasycamp/players/player.html?id=${id}">${name}</a>`;
+                tr.appendChild(playerCell);
+
+                ["IP","K","W","S","BB","R","H","ERA","WHIP"].forEach(f => {
+                    const td = document.createElement("td");
+                    td.textContent = row[f] || "";
+                    tr.appendChild(td);
+                });
+
+                pitchBody.appendChild(tr);
             }
-        ],
-        order: [[0, "asc"]]
-    });
-}
-
-// Build Season Pitching Table
-function buildSeasonPitchingTable(rows) {
-    // Add PLAYER_SORT and IP_SORT
-    rows.forEach(row => {
-        row.PLAYER_SORT = buildPlayerSortKey(row);
-        row.IP_SORT = convertFractionIP(row["IP"]);
+        });
     });
 
-    $('#seasonPitching').DataTable({
-        data: rows,
-        destroy: true,
-        columns: [
-            {
-                title: "Player",
-                data: null,
-                render: function (row, type) {
-                    if (type === "sort") return row.PLAYER_SORT;
-                    return `<a href="/philliesphantasycamp/players/${row["PLAYER ID"]}.html">${row["FIRST NAME"]} ${row["LAST NAME"]}</a>`;
-                }
-            },
-            { data: "IP" },   // display "99 2/3"
-            { data: "K" },
-            { data: "W" },
-            { data: "S" },
-            { data: "BB" },
-            { data: "R" },
-            { data: "H" },
-            {
-                data: "ERA",
-                render: function (value) {
-                    return format2(value);
-                }
-            },
-            {
-                data: "WHIP",
-                render: function (value) {
-                    return format2(value);
-                }
-            },
-            {
-                data: "PLAYER_SORT",
-                visible: false,
-                searchable: false
-            },
-            {
-                data: "IP_SORT",
-                visible: false,
-                searchable: false
-            }
-        ],
-        columnDefs: [
-            {
-                targets: 0,
-                orderData: [10]   // PLAYER_SORT
-            },
-            {
-                targets: 1,
-                orderData: [11]   // IP_SORT
-            }
-        ],
-        order: [[0, "asc"]]
-    });
-}
-
-// Main loader
-function loadSeason(season) {
-    loadCSV(`/philliesphantasycamp/data/hitting_normalized.csv`, function (rows) {
-        const filtered = rows.filter(r => r.SEASON == season);
-        buildSeasonHittingTable(filtered);
-    });
-
-    loadCSV(`/philliesphantasycamp/data/pitching_normalized.csv`, function (rows) {
-        const filtered = rows.filter(r => r.SEASON == season);
-        buildSeasonPitchingTable(filtered);
-    });
-}
+});
