@@ -21,6 +21,26 @@
             margin: 20px;
         }
 
+        nav {
+            background-color: #8b0000;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        nav a {
+            color: white;
+            margin-right: 20px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        nav img {
+            height: 40px;
+            margin-right: 20px;
+        }
+
         h1 {
             margin-bottom: 5px;
         }
@@ -30,131 +50,122 @@
             margin-bottom: 10px;
         }
 
-        table.dataTable {
-            width: 100% !important;
+        table {
+            width: 100%;
             margin-bottom: 40px;
+            border-collapse: collapse;
         }
 
-        .section {
-            margin-top: 40px;
+        table thead th {
+            background: #eee;
+            padding: 8px;
+            border-bottom: 2px solid #ccc;
+        }
+
+        table tbody td {
+            padding: 6px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        #loadingMessage {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #444;
         }
     </style>
 </head>
 
-<body onload="loadPlayerPage()">
-<nav style="background-color: #8b0000; padding: 10px; display: flex; align-items: center;">
-    
-    <!-- Small left‑aligned logo -->
-    <img src="/philliesphantasycamp/images/logo.png" 
-         alt="Logo" 
-         style="height: 40px; margin-right: 20px;">
+<body>
 
-    <!-- Navigation links -->
-    <a href="/philliesphantasycamp/index.html" 
-       style="color: white; margin-right: 20px; text-decoration: none; font-weight: bold;">
-       Home
-    </a>
+<!-- NAVIGATION -->
+<nav>
+    <img src="/philliesphantasycamp/images/logo.png" alt="Logo">
 
-    <a href="/philliesphantasycamp/career.html" 
-       style="color: white; margin-right: 20px; text-decoration: none; font-weight: bold;">
-       Career Leaders
-    </a>
-
-    <a href="/philliesphantasycamp/seasons/index.html" 
-       style="color: white; margin-right: 20px; text-decoration: none; font-weight: bold;">
-       Seasons
-    </a>
-
-    <!-- FIXED: now goes to the new Player Directory -->
-    <a href="/philliesphantasycamp/players/index.html" 
-       style="color: white; margin-right: 20px; text-decoration: none; font-weight: bold;">
-       Player Pages
-    </a>
-
+    <a href="/philliesphantasycamp/index.html">Home</a>
+    <a href="/philliesphantasycamp/career.html">Career Leaders</a>
+    <a href="/philliesphantasycamp/seasons/index.html">Seasons</a>
+    <a href="/philliesphantasycamp/players/index.html">Player Pages</a>
 </nav>
 
-    <!-- Player Name Header -->
-    <h1 id="playerName">Loading...</h1>
+<!-- PLAYER NAME + LOADING -->
+<h1 id="playerName">Loading...</h1>
+<div id="loadingMessage">Loading player data...</div>
 
-    <!-- Season Hitting -->
-    <div class="section">
-        <h2>Season Hitting</h2>
-        <table id="playerHitting" class="display">
-            <thead>
-                <tr>
-                    <th>Season</th>
-                    <th>AB</th>
-                    <th>H</th>
-                    <th>R</th>
-                    <th>RBI</th>
-                    <th>2B</th>
-                    <th>3B</th>
-                    <th>HR</th>
-                    <th>AVG</th>
-                </tr>
-            </thead>
-        </table>
-    </div>
+<!-- SEASON HITTING -->
+<h2>Season Hitting</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Season</th>
+            <th>AB</th>
+            <th>H</th>
+            <th>R</th>
+            <th>RBI</th>
+            <th>2B</th>
+            <th>3B</th>
+            <th>HR</th>
+            <th>AVG</th>
+        </tr>
+    </thead>
+    <tbody id="seasonHittingBody"></tbody>
+</table>
 
-    <!-- Season Pitching -->
-    <div class="section">
-        <h2>Season Pitching</h2>
-        <table id="playerPitching" class="display">
-            <thead>
-                <tr>
-                    <th>Season</th>
-                    <th>IP</th>
-                    <th>K</th>
-                    <th>W</th>
-                    <th>S</th>
-                    <th>BB</th>
-                    <th>R</th>
-                    <th>H</th>
-                    <th>ERA</th>
-                    <th>WHIP</th>
-                </tr>
-            </thead>
-        </table>
-    </div>
+<!-- SEASON PITCHING -->
+<h2>Season Pitching</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Season</th>
+            <th>IP</th>
+            <th>K</th>
+            <th>W</th>
+            <th>S</th>
+            <th>BB</th>
+            <th>R</th>
+            <th>H</th>
+            <th>ERA</th>
+            <th>WHIP</th>
+        </tr>
+    </thead>
+    <tbody id="seasonPitchingBody"></tbody>
+</table>
 
-    <!-- Career Hitting -->
-    <div class="section">
-        <h2>Career Hitting</h2>
-        <table id="playerCareerHitting" class="display">
-            <thead>
-                <tr>
-                    <th>AB</th>
-                    <th>H</th>
-                    <th>R</th>
-                    <th>RBI</th>
-                    <th>2B</th>
-                    <th>3B</th>
-                    <th>HR</th>
-                    <th>AVG</th>
-                </tr>
-            </thead>
-        </table>
-    </div>
+<!-- CAREER HITTING -->
+<h2>Career Hitting</h2>
+<table>
+    <thead>
+        <tr>
+            <th>AB</th>
+            <th>H</th>
+            <th>R</th>
+            <th>RBI</th>
+            <th>2B</th>
+            <th>3B</th>
+            <th>HR</th>
+            <th>AVG</th>
+        </tr>
+    </thead>
+    <tbody id="careerHittingBody"></tbody>
+</table>
 
-    <!-- Career Pitching -->
-    <div class="section">
-        <h2>Career Pitching</h2>
-        <table id="playerCareerPitching" class="display">
-            <thead>
-                <tr>
-                    <th>IP</th>
-                    <th>K</th>
-                    <th>W</th>
-                    <th>S</th>
-                    <th>BB</th>
-                    <th>R</th>
-                    <th>H</th>
-                    <th>ERA</th>
-                    <th>WHIP</th>
-                </tr>
-            </thead>
-        </table>
-    </div>
+<!-- CAREER PITCHING -->
+<h2>Career Pitching</h2>
+<table>
+    <thead>
+        <tr>
+            <th>IP</th>
+            <th>K</th>
+            <th>W</th>
+            <th>S</th>
+            <th>BB</th>
+            <th>R</th>
+            <th>H</th>
+            <th>ERA</th>
+            <th>WHIP</th>
+        </tr>
+    </thead>
+    <tbody id="careerPitchingBody"></tbody>
+</table>
 
 </body>
 </html>
