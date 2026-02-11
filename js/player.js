@@ -1,4 +1,4 @@
-console.log(">>> LOADED player.js FROM HERE <<<");
+console.log(">>> PLAYER.JS VERSION 2 <<<");
 
 document.addEventListener("DOMContentLoaded", function () {
     const urlParams = new URLSearchParams(window.location.search);
