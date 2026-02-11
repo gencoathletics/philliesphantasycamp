@@ -1,61 +1,104 @@
+console.log(">>> LOADED player.js FROM HERE <<<");
+
 document.addEventListener("DOMContentLoaded", function () {
+    const urlParams = new URLSearchParams(window.location.search);
+    const playerId = urlParams.get("id");
 
-    Papa.parse("/philliesphantasycamp/data/hittingcareer_normalized.csv", {
-        download: true,
-        header: true,
-        complete: function (results) {
-            console.log("PARSE RESULT SAMPLE:", results.data.slice(0, 5));
+    if (!playerId) {
+        document.getElementById("playerName").textContent = "Player Not Found";
+        return;
+    }
 
-            const data = results.data;
+    // CSV PATHS — ALL FIXED
+    const PATH = "/philliesphantasycamp/data/";
 
-            // Use REAL CSV headers exactly as they appear
-            const players = {};
-            data.forEach(row => {
-                const id = row["PLAYER ID"];
-                const first = row["FIRST NAME"];
-                const last = row["LAST NAME"];
+    const FILES = {
+        seasonHitting: PATH + "hittingseason_normalized.csv",
+        seasonPitching: PATH + "pitchingseason_normalized.csv",
+        careerHitting: PATH + "hittingcareer_normalized.csv",
+        careerPitching: PATH + "pitchingcareer_normalized.csv"
+    };
 
-                if (id && first && last) {
-                    players[id] = {
-                        id: id.trim(),
-                        first: first.trim(),
-                        last: last.trim()
-                    };
-                }
-            });
+    // DOM TARGETS
+    const nameEl = document.getElementById("playerName");
+    const loadingEl = document.getElementById("loadingMessage");
 
-            const playerArray = Object.values(players).sort((a, b) => {
-                if (a.last === b.last) return a.first.localeCompare(b.first);
-                return a.last.localeCompare(b.last);
-            });
+    const seasonHitBody = document.getElementById("seasonHittingBody");
+    const seasonPitchBody = document.getElementById("seasonPitchingBody");
+    const careerHitBody = document.getElementById("careerHittingBody");
+    const careerPitchBody = document.getElementById("careerPitchingBody");
 
-            const list = document.getElementById("playerList");
+    let playerName = null;
+    let loadCount = 0;
 
-            playerArray.forEach(p => {
-                const li = document.createElement("li");
-
-                li.innerHTML = `
-                    <a class="playerLink"
-                       href="/philliesphantasycamp/players/player.html?id=${p.id}">
-                       ${p.first} ${p.last}
-                    </a>
-                `;
-
-                list.appendChild(li);
-            });
-
-            // Anchor-based search
-            document.getElementById("searchBox").addEventListener("input", function () {
-                const term = this.value.toLowerCase().trim();
-                const items = list.getElementsByTagName("li");
-
-                for (let i = 0; i < items.length; i++) {
-                    const link = items[i].querySelector("a");
-                    const text = link.textContent.toLowerCase().trim();
-                    items[i].style.display = text.includes(term) ? "" : "none";
-                }
-            });
+    function checkDone() {
+        loadCount++;
+        if (loadCount === 4) {
+            loadingEl.style.display = "none";
+            if (playerName) nameEl.textContent = playerName;
         }
+    }
+
+    // GENERIC CSV LOADER
+    function loadCSV(url, callback) {
+        Papa.parse(url, {
+            download: true,
+            header: true,
+            complete: function (results) {
+                callback(results.data);
+                checkDone();
+            }
+        });
+    }
+
+    // RENDER HELPERS
+    function addRow(tbody, row, fields) {
+        const tr = document.createElement("tr");
+        fields.forEach(f => {
+            const td = document.createElement("td");
+            td.textContent = row[f] || "";
+            tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+    }
+
+    // 1️⃣ CAREER HITTING
+    loadCSV(FILES.careerHitting, data => {
+        data.forEach(row => {
+            if (row["PLAYER ID"] === playerId) {
+                if (!playerName) {
+                    playerName = `${row["FIRST NAME"]} ${row["LAST NAME"]}`;
+                }
+                addRow(careerHitBody, row, ["AB", "H", "R", "RBI", "2B", "3B", "HR", "AVG"]);
+            }
+        });
+    });
+
+    // 2️⃣ CAREER PITCHING
+    loadCSV(FILES.careerPitching, data => {
+        data.forEach(row => {
+            if (row["PLAYER ID"] === playerId) {
+                addRow(careerPitchBody, row, ["IP", "K", "W", "S", "BB", "R", "H", "ERA", "WHIP"]);
+            }
+        });
+    });
+
+    // 3️⃣ SEASON HITTING
+    loadCSV(FILES.seasonHitting, data => {
+        data.forEach(row => {
+            if (row["PLAYER ID"] === playerId) {
+                addRow(seasonHitBody, row, ["SEASON", "AB", "H", "R", "RBI", "2B", "3B", "HR", "AVG"]);
+            }
+        });
+    });
+
+    // 4️⃣ SEASON PITCHING
+    loadCSV(FILES.seasonPitching, data => {
+        data.forEach(row => {
+            if (row["PLAYER ID"] === playerId) {
+                addRow(seasonPitchBody, row, ["SEASON", "IP", "K", "W", "S", "BB", "R", "H", "ERA", "WHIP"]);
+            }
+        });
     });
 
 });
