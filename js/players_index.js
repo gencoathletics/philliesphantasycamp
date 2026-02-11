@@ -28,7 +28,7 @@ Papa.parse("/philliesphantasycamp/data/hittingcareer_normalized.csv", {
         playerArray.forEach(p => {
             const li = document.createElement("li");
 
-            // IMPORTANT: Use full absolute path for GitHub Pages
+            // IMPORTANT: Absolute path for GitHub Pages
             li.innerHTML = `
                 <a class="playerLink" 
                    href="/philliesphantasycamp/players/player.html?id=${p.id}">
