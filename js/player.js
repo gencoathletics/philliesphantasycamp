@@ -1,4 +1,4 @@
-console.log(">>> PLAYER.JS VERSION 2 <<<");
+console.log(">>> PLAYER.JS VERSION 3 <<<");
 // force rebuild
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -9,16 +9,16 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("playerName").textContent = "Player Not Found";
         return;
     }
-    
+
     // CSV PATHS
     const PATH = "/philliesphantasycamp/data/";
 
     const FILES = {
-    seasonHitting: "/philliesphantasycamp/data/hittingseason_normalized.csv",
-    seasonPitching: "/philliesphantasycamp/data/pitchingseason_normalized.csv",
-    careerHitting: "/philliesphantasycamp/data/hittingcareer_normalized.csv",
-    careerPitching: "/philliesphantasycamp/data/pitchingcareer_normalized.csv"
-};
+        seasonHitting: PATH + "hitting_normalized.csv",
+        seasonPitching: PATH + "pitching_normalized.csv",
+        careerHitting: PATH + "hittingcareer_normalized.csv",
+        careerPitching: PATH + "pitchingcareer_normalized.csv"
+    };
 
     // DOM TARGETS
     const nameEl = document.getElementById("playerName");
