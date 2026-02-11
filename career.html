@@ -2,77 +2,218 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Career Leaders - Phillies Phantasy Camp</title>
+    <title>Player Profile</title>
 
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <!-- jQuery + DataTables (optional for future use) -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+
+    <!-- PapaParse -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 
+    <!-- Player JS -->
+    <script src="../js/player.js?v=4"></script>
+
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        nav { background-color: #8b0000; padding: 10px; margin-bottom: 20px; }
-        nav a { color: white; margin-right: 20px; text-decoration: none; font-weight: bold; }
-        h1, h2 { color: #b30000; }
-        table { margin-bottom: 40px; }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        nav {
+            background-color: #8b0000;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        nav a {
+            color: white;
+            margin-right: 20px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        nav img {
+            height: 40px;
+            margin-right: 20px;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            margin-top: 40px;
+            margin-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            margin-bottom: 40px;
+            border-collapse: collapse;
+        }
+
+        table thead th {
+            background: #eee;
+            padding: 8px;
+            border-bottom: 2px solid #ccc;
+        }
+
+        table tbody td {
+            padding: 6px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        #loadingMessage {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #444;
+        }
+
+        /* Career Summary Bar */
+        .summary-bar {
+            display: flex;
+            gap: 20px;
+            margin: 20px 0 40px 0;
+            padding: 15px;
+            background: #f7f7f7;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+        }
+
+        .summary-item {
+            flex: 1;
+            text-align: center;
+        }
+
+        .summary-item h3 {
+            margin: 0;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .summary-item p {
+            margin: 5px 0 0 0;
+            font-size: 20px;
+            font-weight: bold;
+        }
     </style>
 </head>
 
 <body>
-    <nav style="background-color: #8b0000; padding: 10px; display: flex; align-items: center;">
-    
-    <!-- Small left‑aligned logo -->
-    <img src="/philliesphantasycamp/images/logo.png" 
-         alt="Logo" 
-         style="height: 40px; margin-right: 20px;">
 
-    <!-- Navigation links -->
-    <a href="/philliesphantasycamp/index.html" 
-       style="color: white; margin-right: 20px; text-decoration: none; font-weight: bold;">
-       Home
-    </a>
+<!-- NAVIGATION -->
+<nav>
+    <img src="/philliesphantasycamp/images/logo.png" alt="Logo">
 
-    <a href="/philliesphantasycamp/career.html" 
-       style="color: white; margin-right: 20px; text-decoration: none; font-weight: bold;">
-       Career Leaders
-    </a>
-
-    <a href="/philliesphantasycamp/seasons/index.html" 
-       style="color: white; margin-right: 20px; text-decoration: none; font-weight: bold;">
-       Seasons
-    </a>
-
-    <!-- FIXED: now goes to the new Player Directory -->
-    <a href="/philliesphantasycamp/players/index.html" 
-       style="color: white; margin-right: 20px; text-decoration: none; font-weight: bold;">
-       Player Pages
-    </a>
-
+    <a href="/philliesphantasycamp/index.html">Home</a>
+    <a href="/philliesphantasycamp/career.html">Career Leaders</a>
+    <a href="/philliesphantasycamp/seasons/index.html">Seasons</a>
+    <a href="/philliesphantasycamp/players/index.html">Player Pages</a>
 </nav>
 
+<!-- PLAYER NAME + LOADING -->
+<h1 id="playerName">Loading...</h1>
+<div id="loadingMessage">Loading player data...</div>
 
-    <h1>Career Leaders</h1>
+<!-- CAREER SUMMARY BAR -->
+<div class="summary-bar" id="careerSummary" style="display:none;">
+    <div class="summary-item">
+        <h3>Career AVG</h3>
+        <p id="sumAVG">–</p>
+    </div>
+    <div class="summary-item">
+        <h3>Career H</h3>
+        <p id="sumH">–</p>
+    </div>
+    <div class="summary-item">
+        <h3>Career IP</h3>
+        <p id="sumIP">–</p>
+    </div>
+    <div class="summary-item">
+        <h3>Career ERA</h3>
+        <p id="sumERA">–</p>
+    </div>
+</div>
 
-    <h2>Career Hitting</h2>
-    <table id="careerHitting" class="display">
-        <thead>
-            <tr>
-                <th>Player</th><th>AB</th><th>H</th><th>R</th><th>RBI</th><th>2B</th><th>3B</th><th>HR</th><th>AVG</th>
-            </tr>
-        </thead>
-    </table>
+<!-- CAREER HITTING -->
+<h2>Career Hitting</h2>
+<table>
+    <thead>
+        <tr>
+            <th>AB</th>
+            <th>H</th>
+            <th>R</th>
+            <th>RBI</th>
+            <th>2B</th>
+            <th>3B</th>
+            <th>HR</th>
+            <th>AVG</th>
+        </tr>
+    </thead>
+    <tbody id="careerHittingBody"></tbody>
+</table>
 
-    <h2>Career Pitching</h2>
-    <table id="careerPitching" class="display">
-        <thead>
-            <tr>
-                <th>Player</th><th>IP</th><th>K</th><th>W</th><th>S</th><th>BB</th><th>R</th><th>H</th><th>ERA</th><th>WHIP</th>
-            </tr>
-        </thead>
-    </table>
+<!-- CAREER PITCHING -->
+<h2>Career Pitching</h2>
+<table>
+    <thead>
+        <tr>
+            <th>IP</th>
+            <th>K</th>
+            <th>W</th>
+            <th>S</th>
+            <th>BB</th>
+            <th>R</th>
+            <th>H</th>
+            <th>ERA</th>
+            <th>WHIP</th>
+        </tr>
+    </thead>
+    <tbody id="careerPitchingBody"></tbody>
+</table>
 
-    <!-- THIS is the correct JS file -->
-    <script src="/philliesphantasycamp/js/career.js"></script>
+<!-- SEASON HITTING -->
+<h2>Season Hitting</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Season</th>
+            <th>AB</th>
+            <th>H</th>
+            <th>R</th>
+            <th>RBI</th>
+            <th>2B</th>
+            <th>3B</th>
+            <th>HR</th>
+            <th>AVG</th>
+        </tr>
+    </thead>
+    <tbody id="seasonHittingBody"></tbody>
+</table>
+
+<!-- SEASON PITCHING -->
+<h2>Season Pitching</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Season</th>
+            <th>IP</th>
+            <th>K</th>
+            <th>W</th>
+            <th>S</th>
+            <th>BB</th>
+            <th>R</th>
+            <th>H</th>
+            <th>ERA</th>
+            <th>WHIP</th>
+        </tr>
+    </thead>
+    <tbody id="seasonPitchingBody"></tbody>
+</table>
 
 </body>
 </html>
