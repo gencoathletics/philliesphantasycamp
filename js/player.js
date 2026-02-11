@@ -1,5 +1,4 @@
-console.log(">>> PLAYER.JS VERSION 3 <<<");
-// force rebuild
+console.log(">>> PLAYER.JS VERSION 4 <<<");
 
 document.addEventListener("DOMContentLoaded", function () {
     const urlParams = new URLSearchParams(window.location.search);
@@ -32,20 +31,18 @@ document.addEventListener("DOMContentLoaded", function () {
     // Summary bar elements
     const summaryBar = document.getElementById("careerSummary");
     const sumAVG = document.getElementById("sumAVG");
-    const sumHR = document.getElementById("sumHR");
-    const sumRBI = document.getElementById("sumRBI");
-    const sumERA = document.getElementById("sumERA");
+    const sumH = document.getElementById("sumH");
     const sumIP = document.getElementById("sumIP");
+    const sumERA = document.getElementById("sumERA");
 
     let playerName = null;
     let loadCount = 0;
 
     // Summary values
     let careerAVG = null;
-    let careerHR = null;
-    let careerRBI = null;
-    let careerERA = null;
+    let careerH = null;
     let careerIP = null;
+    let careerERA = null;
 
     function checkDone() {
         loadCount++;
@@ -53,19 +50,15 @@ document.addEventListener("DOMContentLoaded", function () {
             loadingEl.style.display = "none";
             if (playerName) nameEl.textContent = playerName;
 
-            // Show summary bar once all data is loaded
             summaryBar.style.display = "flex";
 
-            // Populate summary bar
             sumAVG.textContent = careerAVG ?? "–";
-            sumHR.textContent = careerHR ?? "–";
-            sumRBI.textContent = careerRBI ?? "–";
-            sumERA.textContent = careerERA ?? "–";
+            sumH.textContent = careerH ?? "–";
             sumIP.textContent = careerIP ?? "–";
+            sumERA.textContent = careerERA ?? "–";
         }
     }
 
-    // GENERIC CSV LOADER
     function loadCSV(url, callback) {
         Papa.parse(url, {
             download: true,
@@ -77,7 +70,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // RENDER HELPERS
     function addRow(tbody, row, fields) {
         const tr = document.createElement("tr");
         fields.forEach(f => {
@@ -88,33 +80,28 @@ document.addEventListener("DOMContentLoaded", function () {
         tbody.appendChild(tr);
     }
 
-    // 1️⃣ CAREER HITTING
+    // CAREER HITTING
     loadCSV(FILES.careerHitting, data => {
         data.forEach(row => {
             if (row["PLAYER ID"] === playerId) {
 
-                // Capture player name
                 if (!playerName) {
                     playerName = `${row["FIRST NAME"]} ${row["LAST NAME"]}`;
                 }
 
-                // Capture summary stats
                 careerAVG = row["AVG"] || "–";
-                careerHR = row["HR"] || "0";
-                careerRBI = row["RBI"] || "0";
+                careerH = row["H"] || "0";
 
-                // Add table row
                 addRow(careerHitBody, row, ["AB", "H", "R", "RBI", "2B", "3B", "HR", "AVG"]);
             }
         });
     });
 
-    // 2️⃣ CAREER PITCHING
+    // CAREER PITCHING
     loadCSV(FILES.careerPitching, data => {
         data.forEach(row => {
             if (row["PLAYER ID"] === playerId) {
 
-                // Capture summary stats
                 careerERA = row["ERA"] || "–";
                 careerIP = row["IP"] || "0";
 
@@ -123,20 +110,48 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    // 3️⃣ SEASON HITTING
+    // SEASON HITTING (with season links)
     loadCSV(FILES.seasonHitting, data => {
         data.forEach(row => {
             if (row["PLAYER ID"] === playerId) {
-                addRow(seasonHitBody, row, ["SEASON", "AB", "H", "R", "RBI", "2B", "3B", "HR", "AVG"]);
+
+                const tr = document.createElement("tr");
+
+                const season = row["SEASON"];
+                const seasonCell = document.createElement("td");
+                seasonCell.innerHTML = `<a href="/philliesphantasycamp/seasons/${season}.html">${season}</a>`;
+                tr.appendChild(seasonCell);
+
+                ["AB","H","R","RBI","2B","3B","HR","AVG"].forEach(f => {
+                    const td = document.createElement("td");
+                    td.textContent = row[f] || "";
+                    tr.appendChild(td);
+                });
+
+                seasonHitBody.appendChild(tr);
             }
         });
     });
 
-    // 4️⃣ SEASON PITCHING
+    // SEASON PITCHING (with season links)
     loadCSV(FILES.seasonPitching, data => {
         data.forEach(row => {
             if (row["PLAYER ID"] === playerId) {
-                addRow(seasonPitchBody, row, ["SEASON", "IP", "K", "W", "S", "BB", "R", "H", "ERA", "WHIP"]);
+
+                const tr = document.createElement("tr");
+
+                const season = row["SEASON"];
+                const seasonCell = document.createElement("td");
+                seasonCell.innerHTML = `<a href="/philliesphantasycamp/seasons/${season}.html">${season}</a>`;
+                tr.appendChild(seasonCell);
+
+                ["IP","K","W","S","BB","R","H","ERA","WHIP"].forEach(f => {
+                    const td = document.createElement("td");
+                    td.textContent = row[f] || "";
+                    tr.appendChild(td);
+                });
+
+                seasonPitchBody.appendChild(tr);
             }
         });
     });
