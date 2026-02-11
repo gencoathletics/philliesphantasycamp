@@ -6,14 +6,18 @@ document.addEventListener("DOMContentLoaded", function () {
         complete: function (results) {
             const data = results.data;
 
-            // Collect unique players by PLAYERID
+            // Collect unique players using REAL CSV headers
             const players = {};
             data.forEach(row => {
-                if (row.PLAYERID && row.FIRST && row.LAST) {
-                    players[row.PLAYERID] = {
-                        id: row.PLAYERID,
-                        first: row.FIRST.trim(),
-                        last: row.LAST.trim()
+                const id = row["PLAYER ID"];
+                const first = row["FIRST NAME"];
+                const last = row["LAST NAME"];
+
+                if (id && first && last) {
+                    players[id] = {
+                        id: id.trim(),
+                        first: first.trim(),
+                        last: last.trim()
                     };
                 }
             });
@@ -39,7 +43,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 list.appendChild(li);
             });
 
-            // ⭐ Anchor-based search fix
+            // Anchor-based search fix
             document.getElementById("searchBox").addEventListener("input", function () {
                 const term = this.value.toLowerCase().trim();
                 const items = list.getElementsByTagName("li");
