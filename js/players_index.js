@@ -2,7 +2,7 @@ console.log(">>> LOADED players_index.js FROM HERE <<<");
 
 document.addEventListener("DOMContentLoaded", function () {
 
-    Papa.parse("/data/hittingcareer_normalized.csv", {
+    Papa.parse("/philliesphantasycamp/data/hittingcareer_normalized.csv", {
         download: true,
         header: true,
         complete: function (results) {
