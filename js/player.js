@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
     }
 
+    
     // CSV PATHS
     const PATH = "/philliesphantasycamp/data/";
 
