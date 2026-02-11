@@ -1,14 +1,9 @@
-console.log(">>> SEASONS.JS VERSION 4 (with normalization) <<<");
+console.log(">>> SEASONS.JS VERSION 5 (FINAL) <<<");
 
 document.addEventListener("DOMContentLoaded", function () {
 
-    // Determine which season page we are on
     const season = document.body.getAttribute("data-season");
-
-    if (!season) {
-        console.error("No season found in data-season attribute");
-        return;
-    }
+    if (!season) return;
 
     const PATH = "/philliesphantasycamp/data/";
 
@@ -20,22 +15,28 @@ document.addEventListener("DOMContentLoaded", function () {
     const hitBody = document.getElementById("hittingBody");
     const pitchBody = document.getElementById("pitchingBody");
 
-    // ⭐ Normalize CSV row keys (fixes undefined player names + alignment)
+    // ⭐ Normalize CSV keys
     function normalizeRow(row) {
         const clean = {};
-        Object.keys(row).forEach(key => {
-            clean[key.trim()] = row[key];
-        });
+        Object.keys(row).forEach(key => clean[key.trim()] = row[key]);
         return clean;
+    }
+
+    // ⭐ Build full name + sorting key
+    function buildPlayerName(row) {
+        const first = row["FIRST_NAME"] || "";
+        const last = row["LAST_NAME"] || "";
+        return {
+            display: `${first} ${last}`.trim(),
+            sortKey: `${last.toLowerCase()}_${first.toLowerCase()}`
+        };
     }
 
     function loadCSV(url, callback) {
         Papa.parse(url, {
             download: true,
             header: true,
-            complete: function (results) {
-                callback(results.data);
-            }
+            complete: results => callback(results.data)
         });
     }
 
@@ -43,26 +44,29 @@ document.addEventListener("DOMContentLoaded", function () {
     loadCSV(FILES.hitting, data => {
         data.forEach(raw => {
             const row = normalizeRow(raw);
+            if (row["SEASON"] !== season) return;
 
-            if (row["SEASON"] === season) {
+            const tr = document.createElement("tr");
 
-                const tr = document.createElement("tr");
+            // Build name + sort key
+            const nameObj = buildPlayerName(row);
 
-                // Player name links to player page
-                const playerCell = document.createElement("td");
-                const id = row["PLAYER ID"];
-                const name = row["PLAYER"];
-                playerCell.innerHTML = `<a href="/philliesphantasycamp/players/player.html?id=${id}">${name}</a>`;
-                tr.appendChild(playerCell);
+            const playerCell = document.createElement("td");
+            playerCell.innerHTML = `
+                <span style="display:none;">${nameObj.sortKey}</span>
+                <a href="/philliesphantasycamp/players/player.html?id=${row["PLAYER ID"]}">
+                    ${nameObj.display}
+                </a>
+            `;
+            tr.appendChild(playerCell);
 
-                ["AB","H","R","RBI","2B","3B","HR","AVG"].forEach(f => {
-                    const td = document.createElement("td");
-                    td.textContent = row[f] || "";
-                    tr.appendChild(td);
-                });
+            ["AB","H","R","RBI","2B","3B","HR","AVG"].forEach(f => {
+                const td = document.createElement("td");
+                td.textContent = row[f] || "";
+                tr.appendChild(td);
+            });
 
-                hitBody.appendChild(tr);
-            }
+            hitBody.appendChild(tr);
         });
     });
 
@@ -70,25 +74,28 @@ document.addEventListener("DOMContentLoaded", function () {
     loadCSV(FILES.pitching, data => {
         data.forEach(raw => {
             const row = normalizeRow(raw);
+            if (row["SEASON"] !== season) return;
 
-            if (row["SEASON"] === season) {
+            const tr = document.createElement("tr");
 
-                const tr = document.createElement("tr");
+            const nameObj = buildPlayerName(row);
 
-                const playerCell = document.createElement("td");
-                const id = row["PLAYER ID"];
-                const name = row["PLAYER"];
-                playerCell.innerHTML = `<a href="/philliesphantasycamp/players/player.html?id=${id}">${name}</a>`;
-                tr.appendChild(playerCell);
+            const playerCell = document.createElement("td");
+            playerCell.innerHTML = `
+                <span style="display:none;">${nameObj.sortKey}</span>
+                <a href="/philliesphantasycamp/players/player.html?id=${row["PLAYER ID"]}">
+                    ${nameObj.display}
+                </a>
+            `;
+            tr.appendChild(playerCell);
 
-                ["IP","K","W","S","BB","R","H","ERA","WHIP"].forEach(f => {
-                    const td = document.createElement("td");
-                    td.textContent = row[f] || "";
-                    tr.appendChild(td);
-                });
+            ["IP","K","W","S","BB","R","H","ERA","WHIP"].forEach(f => {
+                const td = document.createElement("td");
+                td.textContent = row[f] || "";
+                tr.appendChild(td);
+            });
 
-                pitchBody.appendChild(tr);
-            }
+            pitchBody.appendChild(tr);
         });
     });
 
