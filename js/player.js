@@ -1,144 +1,61 @@
-// Helper: get querystring value (player ID)
-function getPlayerID() {
-    const params = new URLSearchParams(window.location.search);
-    return params.get("id");
-}
+document.addEventListener("DOMContentLoaded", function () {
 
-// Load CSV helper
-function loadCSV(path, callback) {
-    Papa.parse(path, {
+    Papa.parse("/philliesphantasycamp/data/hittingcareer_normalized.csv", {
         download: true,
         header: true,
-        dynamicTyping: true,
         complete: function (results) {
-            callback(results.data);
+            console.log("PARSE RESULT SAMPLE:", results.data.slice(0, 5));
+
+            const data = results.data;
+
+            // Use REAL CSV headers exactly as they appear
+            const players = {};
+            data.forEach(row => {
+                const id = row["PLAYER ID"];
+                const first = row["FIRST NAME"];
+                const last = row["LAST NAME"];
+
+                if (id && first && last) {
+                    players[id] = {
+                        id: id.trim(),
+                        first: first.trim(),
+                        last: last.trim()
+                    };
+                }
+            });
+
+            const playerArray = Object.values(players).sort((a, b) => {
+                if (a.last === b.last) return a.first.localeCompare(b.first);
+                return a.last.localeCompare(b.last);
+            });
+
+            const list = document.getElementById("playerList");
+
+            playerArray.forEach(p => {
+                const li = document.createElement("li");
+
+                li.innerHTML = `
+                    <a class="playerLink"
+                       href="/philliesphantasycamp/players/player.html?id=${p.id}">
+                       ${p.first} ${p.last}
+                    </a>
+                `;
+
+                list.appendChild(li);
+            });
+
+            // Anchor-based search
+            document.getElementById("searchBox").addEventListener("input", function () {
+                const term = this.value.toLowerCase().trim();
+                const items = list.getElementsByTagName("li");
+
+                for (let i = 0; i < items.length; i++) {
+                    const link = items[i].querySelector("a");
+                    const text = link.textContent.toLowerCase().trim();
+                    items[i].style.display = text.includes(term) ? "" : "none";
+                }
+            });
         }
     });
-}
 
-// Build Hitting Season Table
-function buildPlayerHittingTable(rows, playerID) {
-    const filtered = rows.filter(r => r["PLAYER ID"] == playerID);
-
-    $('#playerHitting').DataTable({
-        data: filtered,
-        destroy: true,
-        columns: [
-            { data: "SEASON" },
-            { data: "AB" },
-            { data: "H" },
-            { data: "R" },
-            { data: "RBI" },
-            { data: "2B" },
-            { data: "3B" },
-            { data: "HR" },
-            { data: "AVG" }
-        ],
-        order: [[0, "asc"]]
-    });
-}
-
-// Build Pitching Season Table
-function buildPlayerPitchingTable(rows, playerID) {
-    const filtered = rows.filter(r => r["PLAYER ID"] == playerID);
-
-    $('#playerPitching').DataTable({
-        data: filtered,
-        destroy: true,
-        columns: [
-            { data: "SEASON" },
-            { data: "IP" },
-            { data: "K" },
-            { data: "W" },
-            { data: "S" },
-            { data: "BB" },
-            { data: "R" },
-            { data: "H" },
-            { data: "ERA" },
-            { data: "WHIP" }
-        ],
-        order: [[0, "asc"]]
-    });
-}
-
-// Build Career Hitting Table
-function buildPlayerCareerHittingTable(rows, playerID) {
-    const filtered = rows.filter(r => r["PLAYER ID"] == playerID);
-
-    $('#playerCareerHitting').DataTable({
-        data: filtered,
-        destroy: true,
-        searching: false,
-        paging: false,
-        info: false,
-        columns: [
-            { data: "AB" },
-            { data: "H" },
-            { data: "R" },
-            { data: "RBI" },
-            { data: "2B" },
-            { data: "3B" },
-            { data: "HR" },
-            { data: "AVG" }
-        ]
-    });
-}
-
-// Build Career Pitching Table
-function buildPlayerCareerPitchingTable(rows, playerID) {
-    const filtered = rows.filter(r => r["PLAYER ID"] == playerID);
-
-    $('#playerCareerPitching').DataTable({
-        data: filtered,
-        destroy: true,
-        searching: false,
-        paging: false,
-        info: false,
-        columns: [
-            { data: "IP" },
-            { data: "K" },
-            { data: "W" },
-            { data: "S" },
-            { data: "BB" },
-            { data: "R" },
-            { data: "H" },
-            { data: "ERA" },
-            { data: "WHIP" }
-        ]
-    });
-}
-
-// Set Player Header Name
-function setPlayerHeader(rows, playerID) {
-    const player = rows.find(r => r["PLAYER ID"] == playerID);
-    if (player) {
-        document.getElementById("playerName").textContent =
-            `${player["FIRST NAME"]} ${player["LAST NAME"]}`;
-    }
-}
-
-// Main loader
-function loadPlayerPage() {
-    const playerID = getPlayerID();
-
-    // Load hitting season stats
-    loadCSV("../data/hitting_normalized.csv", data => {
-        setPlayerHeader(data, playerID);
-        buildPlayerHittingTable(data, playerID);
-    });
-
-    // Load pitching season stats
-    loadCSV("../data/pitching_normalized.csv", data => {
-        buildPlayerPitchingTable(data, playerID);
-    });
-
-    // Load career hitting
-    loadCSV("../data/hittingcareer_normalized.csv", data => {
-        buildPlayerCareerHittingTable(data, playerID);
-    });
-
-    // Load career pitching
-    loadCSV("../data/pitchingcareer_normalized.csv", data => {
-        buildPlayerCareerPitchingTable(data, playerID);
-    });
-}
+});
