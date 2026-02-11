@@ -42,7 +42,7 @@
         }
 
         h1 {
-            margin-bottom: 5px;
+            margin-bottom: 10px;
         }
 
         h2 {
@@ -72,6 +72,34 @@
             margin-bottom: 20px;
             color: #444;
         }
+
+        /* Career Summary Bar */
+        .summary-bar {
+            display: flex;
+            gap: 20px;
+            margin: 20px 0 40px 0;
+            padding: 15px;
+            background: #f7f7f7;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+        }
+
+        .summary-item {
+            flex: 1;
+            text-align: center;
+        }
+
+        .summary-item h3 {
+            margin: 0;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .summary-item p {
+            margin: 5px 0 0 0;
+            font-size: 20px;
+            font-weight: bold;
+        }
     </style>
 </head>
 
@@ -90,6 +118,67 @@
 <!-- PLAYER NAME + LOADING -->
 <h1 id="playerName">Loading...</h1>
 <div id="loadingMessage">Loading player data...</div>
+
+<!-- CAREER SUMMARY BAR -->
+<div class="summary-bar" id="careerSummary" style="display:none;">
+    <div class="summary-item">
+        <h3>Career AVG</h3>
+        <p id="sumAVG">–</p>
+    </div>
+    <div class="summary-item">
+        <h3>Career HR</h3>
+        <p id="sumHR">–</p>
+    </div>
+    <div class="summary-item">
+        <h3>Career RBI</h3>
+        <p id="sumRBI">–</p>
+    </div>
+    <div class="summary-item">
+        <h3>Career ERA</h3>
+        <p id="sumERA">–</p>
+    </div>
+    <div class="summary-item">
+        <h3>Career IP</h3>
+        <p id="sumIP">–</p>
+    </div>
+</div>
+
+<!-- CAREER HITTING -->
+<h2>Career Hitting</h2>
+<table>
+    <thead>
+        <tr>
+            <th>AB</th>
+            <th>H</th>
+            <th>R</th>
+            <th>RBI</th>
+            <th>2B</th>
+            <th>3B</th>
+            <th>HR</th>
+            <th>AVG</th>
+        </tr>
+    </thead>
+    <tbody id="careerHittingBody"></tbody>
+</table>
+
+<!-- CAREER PITCHING -->
+<h2>Career Pitching</h2>
+<table>
+    <thead>
+        <tr>
+            <th>IP</th>
+            <th>K</th>
+            <th>W</th>
+            <th>S</th>
+            <th>BB</th>
+            <th>R</th>
+            <th>H</th>
+            <th>ERA</th>
+            <th>WHIP</th>
+        </tr>
+    </thead>
+    <tbody id="careerPitchingBody"></tbody>
+</table>
 
 <!-- SEASON HITTING -->
 <h2>Season Hitting</h2>
@@ -128,43 +217,6 @@
         </tr>
     </thead>
     <tbody id="seasonPitchingBody"></tbody>
-</table>
-
-<!-- CAREER HITTING -->
-<h2>Career Hitting</h2>
-<table>
-    <thead>
-        <tr>
-            <th>AB</th>
-            <th>H</th>
-            <th>R</th>
-            <th>RBI</th>
-            <th>2B</th>
-            <th>3B</th>
-            <th>HR</th>
-            <th>AVG</th>
-        </tr>
-    </thead>
-    <tbody id="careerHittingBody"></tbody>
-</table>
-
-<!-- CAREER PITCHING -->
-<h2>Career Pitching</h2>
-<table>
-    <thead>
-        <tr>
-            <th>IP</th>
-            <th>K</th>
-            <th>W</th>
-            <th>S</th>
-            <th>BB</th>
-            <th>R</th>
-            <th>H</th>
-            <th>ERA</th>
-            <th>WHIP</th>
-        </tr>
-    </thead>
-    <tbody id="careerPitchingBody"></tbody>
 </table>
 
 </body>
