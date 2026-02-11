@@ -4,14 +4,16 @@
     <meta charset="UTF-8">
     <title>2009 Season</title>
 
+    <!-- DataTables -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
 
+    <!-- PapaParse -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 
-    <!-- IMPORTANT: This must be VERSION 5 -->
-    <script src="../js/seasons.js?v=5"></script>
+    <!-- Seasons JS (final version coming next) -->
+    <script src="../js/seasons.js?v=7"></script>
 
     <style>
         body { font-family: Arial, sans-serif; margin: 20px; }
@@ -27,7 +29,6 @@
     </style>
 </head>
 
-<!-- ⭐ REQUIRED for seasons.js to filter correctly -->
 <body data-season="2009">
 
 <nav>
@@ -66,6 +67,7 @@
 <table id="hittingTable">
     <thead>
         <tr>
+            <th style="display:none;">Sort</th> <!-- Hidden last-name sort column -->
             <th>Player</th>
             <th>AB</th>
             <th>H</th>
@@ -84,6 +86,7 @@
 <table id="pitchingTable">
     <thead>
         <tr>
+            <th style="display:none;">Sort</th> <!-- Hidden last-name sort column -->
             <th>Player</th>
             <th>IP</th>
             <th>K</th>
@@ -98,6 +101,27 @@
     </thead>
     <tbody id="pitchingBody"></tbody>
 </table>
+
+<!-- DataTables initialization -->
+<script>
+$(document).ready(function() {
+    $('#hittingTable').DataTable({
+        columnDefs: [
+            { targets: 0, visible: false },     // hide sort column
+            { targets: 1, orderData: 0 }        // PLAYER sorts by hidden column
+        ],
+        order: [[0, 'asc']]
+    });
+
+    $('#pitchingTable').DataTable({
+        columnDefs: [
+            { targets: 0, visible: false },
+            { targets: 1, orderData: 0 }
+        ],
+        order: [[0, 'asc']]
+    });
+});
+</script>
 
 </body>
 </html>
