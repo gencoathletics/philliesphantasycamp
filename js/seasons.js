@@ -1,6 +1,7 @@
-console.log(">>> SEASONS.JS VERSION 6 (FINAL) <<<");
+console.log(">>> SEASONS.JS VERSION 7 (FINAL) <<<");
 
 document.addEventListener("DOMContentLoaded", function () {
+
     const season = document.body.getAttribute("data-season");
     if (!season) return;
 
@@ -14,22 +15,21 @@ document.addEventListener("DOMContentLoaded", function () {
     const hitBody = document.getElementById("hittingBody");
     const pitchBody = document.getElementById("pitchingBody");
 
-    // Normalize CSV keys
+    // Normalize CSV keys (trim whitespace)
     function normalizeRow(row) {
         const clean = {};
-        Object.keys(row).forEach(key => {
-            clean[key.trim()] = row[key];
-        });
+        Object.keys(row).forEach(key => clean[key.trim()] = row[key]);
         return clean;
     }
 
-    // Build full name + sort key using "FIRST NAME" / "LAST NAME"
+    // Build full name + hidden sort key
     function buildPlayerName(row) {
         const first = row["FIRST NAME"] || "";
         const last = row["LAST NAME"] || "";
+
         return {
             display: `${first} ${last}`.trim(),
-            sortKey: `${(last || "").toLowerCase()}_${(first || "").toLowerCase()}`
+            sortKey: `${last.toLowerCase()}_${first.toLowerCase()}`
         };
     }
 
@@ -41,7 +41,9 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    // -------------------------
     // HITTING TABLE
+    // -------------------------
     loadCSV(FILES.hitting, data => {
         data.forEach(raw => {
             const row = normalizeRow(raw);
@@ -51,15 +53,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
             const nameObj = buildPlayerName(row);
 
+            // Hidden sort column
+            const sortCell = document.createElement("td");
+            sortCell.style.display = "none";
+            sortCell.textContent = nameObj.sortKey;
+            tr.appendChild(sortCell);
+
+            // Visible PLAYER column
             const playerCell = document.createElement("td");
             playerCell.innerHTML = `
-                <span style="display:none;">${nameObj.sortKey}</span>
                 <a href="/philliesphantasycamp/players/player.html?id=${row["PLAYER ID"]}">
                     ${nameObj.display}
                 </a>
             `;
             tr.appendChild(playerCell);
 
+            // Stat columns
             ["AB","H","R","RBI","2B","3B","HR","AVG"].forEach(f => {
                 const td = document.createElement("td");
                 td.textContent = row[f] || "";
@@ -70,7 +79,9 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
+    // -------------------------
     // PITCHING TABLE
+    // -------------------------
     loadCSV(FILES.pitching, data => {
         data.forEach(raw => {
             const row = normalizeRow(raw);
@@ -80,15 +91,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
             const nameObj = buildPlayerName(row);
 
+            // Hidden sort column
+            const sortCell = document.createElement("td");
+            sortCell.style.display = "none";
+            sortCell.textContent = nameObj.sortKey;
+            tr.appendChild(sortCell);
+
+            // Visible PLAYER column
             const playerCell = document.createElement("td");
             playerCell.innerHTML = `
-                <span style="display:none;">${nameObj.sortKey}</span>
                 <a href="/philliesphantasycamp/players/player.html?id=${row["PLAYER ID"]}">
                     ${nameObj.display}
                 </a>
             `;
             tr.appendChild(playerCell);
 
+            // Stat columns
             ["IP","K","W","S","BB","R","H","ERA","WHIP"].forEach(f => {
                 const td = document.createElement("td");
                 td.textContent = row[f] || "";
