@@ -1,4 +1,4 @@
-console.log(">>> SEASONS.JS VERSION 3 <<<");
+console.log(">>> SEASONS.JS VERSION 4 (with normalization) <<<");
 
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -20,6 +20,15 @@ document.addEventListener("DOMContentLoaded", function () {
     const hitBody = document.getElementById("hittingBody");
     const pitchBody = document.getElementById("pitchingBody");
 
+    // ⭐ Normalize CSV row keys (fixes undefined player names + alignment)
+    function normalizeRow(row) {
+        const clean = {};
+        Object.keys(row).forEach(key => {
+            clean[key.trim()] = row[key];
+        });
+        return clean;
+    }
+
     function loadCSV(url, callback) {
         Papa.parse(url, {
             download: true,
@@ -30,19 +39,11 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    function addRow(tbody, row, fields) {
-        const tr = document.createElement("tr");
-        fields.forEach(f => {
-            const td = document.createElement("td");
-            td.textContent = row[f] || "";
-            tr.appendChild(td);
-        });
-        tbody.appendChild(tr);
-    }
-
-    // HITTING TABLE
+    // ⭐ HITTING TABLE
     loadCSV(FILES.hitting, data => {
-        data.forEach(row => {
+        data.forEach(raw => {
+            const row = normalizeRow(raw);
+
             if (row["SEASON"] === season) {
 
                 const tr = document.createElement("tr");
@@ -65,9 +66,11 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    // PITCHING TABLE
+    // ⭐ PITCHING TABLE
     loadCSV(FILES.pitching, data => {
-        data.forEach(row => {
+        data.forEach(raw => {
+            const row = normalizeRow(raw);
+
             if (row["SEASON"] === season) {
 
                 const tr = document.createElement("tr");
