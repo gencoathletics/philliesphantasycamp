@@ -107,8 +107,8 @@
 $(document).ready(function() {
     $('#hittingTable').DataTable({
         columnDefs: [
-            { targets: 0, visible: false },     // hide sort column
-            { targets: 1, orderData: 0 }        // PLAYER sorts by hidden column
+            { targets: 0, visible: false },
+            { targets: 1, orderData: 0 }
         ],
         order: [[0, 'asc']]
     });
