@@ -1,4 +1,4 @@
-console.log(">>> PLAYER.JS VERSION 4 <<<");
+console.log(">>> PLAYER.JS VERSION 5 <<<");
 
 document.addEventListener("DOMContentLoaded", function () {
     const urlParams = new URLSearchParams(window.location.search);
@@ -9,7 +9,6 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
     }
 
-    // CSV PATHS
     const PATH = "/philliesphantasycamp/data/";
 
     const FILES = {
@@ -19,7 +18,6 @@ document.addEventListener("DOMContentLoaded", function () {
         careerPitching: PATH + "pitchingcareer_normalized.csv"
     };
 
-    // DOM TARGETS
     const nameEl = document.getElementById("playerName");
     const loadingEl = document.getElementById("loadingMessage");
 
@@ -28,7 +26,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const careerHitBody = document.getElementById("careerHittingBody");
     const careerPitchBody = document.getElementById("careerPitchingBody");
 
-    // Summary bar elements
     const summaryBar = document.getElementById("careerSummary");
     const sumAVG = document.getElementById("sumAVG");
     const sumH = document.getElementById("sumH");
@@ -38,7 +35,6 @@ document.addEventListener("DOMContentLoaded", function () {
     let playerName = null;
     let loadCount = 0;
 
-    // Summary values
     let careerAVG = null;
     let careerH = null;
     let careerIP = null;
@@ -84,7 +80,6 @@ document.addEventListener("DOMContentLoaded", function () {
     loadCSV(FILES.careerHitting, data => {
         data.forEach(row => {
             if (row["PLAYER ID"] === playerId) {
-
                 if (!playerName) {
                     playerName = `${row["FIRST NAME"]} ${row["LAST NAME"]}`;
                 }
@@ -101,20 +96,18 @@ document.addEventListener("DOMContentLoaded", function () {
     loadCSV(FILES.careerPitching, data => {
         data.forEach(row => {
             if (row["PLAYER ID"] === playerId) {
-
-                careerERA = row["ERA"] || "–";
                 careerIP = row["IP"] || "0";
+                careerERA = row["ERA"] || "–";
 
                 addRow(careerPitchBody, row, ["IP", "K", "W", "S", "BB", "R", "H", "ERA", "WHIP"]);
             }
         });
     });
 
-    // SEASON HITTING (with season links)
+    // SEASON HITTING (Season links)
     loadCSV(FILES.seasonHitting, data => {
         data.forEach(row => {
             if (row["PLAYER ID"] === playerId) {
-
                 const tr = document.createElement("tr");
 
                 const season = row["SEASON"];
@@ -133,11 +126,10 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    // SEASON PITCHING (with season links)
+    // SEASON PITCHING (Season links)
     loadCSV(FILES.seasonPitching, data => {
         data.forEach(row => {
             if (row["PLAYER ID"] === playerId) {
-
                 const tr = document.createElement("tr");
 
                 const season = row["SEASON"];
