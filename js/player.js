@@ -1,4 +1,4 @@
-console.log(">>> PLAYER.JS VERSION 5 <<<");
+console.log(">>> PLAYER.JS VERSION 6 <<<");
 
 document.addEventListener("DOMContentLoaded", function () {
     const urlParams = new URLSearchParams(window.location.search);
@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
     }
 
+    // CSV PATHS
     const PATH = "/philliesphantasycamp/data/";
 
     const FILES = {
@@ -18,6 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
         careerPitching: PATH + "pitchingcareer_normalized.csv"
     };
 
+    // DOM TARGETS
     const nameEl = document.getElementById("playerName");
     const loadingEl = document.getElementById("loadingMessage");
 
@@ -26,6 +28,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const careerHitBody = document.getElementById("careerHittingBody");
     const careerPitchBody = document.getElementById("careerPitchingBody");
 
+    // Summary bar elements
     const summaryBar = document.getElementById("careerSummary");
     const sumAVG = document.getElementById("sumAVG");
     const sumH = document.getElementById("sumH");
@@ -35,10 +38,20 @@ document.addEventListener("DOMContentLoaded", function () {
     let playerName = null;
     let loadCount = 0;
 
+    // Summary values
     let careerAVG = null;
     let careerH = null;
     let careerIP = null;
     let careerERA = null;
+
+    // ⭐ Normalize CSV row keys (fixes all alignment issues)
+    function normalizeRow(row) {
+        const clean = {};
+        Object.keys(row).forEach(key => {
+            clean[key.trim()] = row[key];
+        });
+        return clean;
+    }
 
     function checkDone() {
         loadCount++;
@@ -76,10 +89,13 @@ document.addEventListener("DOMContentLoaded", function () {
         tbody.appendChild(tr);
     }
 
-    // CAREER HITTING
+    // 1️⃣ CAREER HITTING
     loadCSV(FILES.careerHitting, data => {
-        data.forEach(row => {
+        data.forEach(raw => {
+            const row = normalizeRow(raw);
+
             if (row["PLAYER ID"] === playerId) {
+
                 if (!playerName) {
                     playerName = `${row["FIRST NAME"]} ${row["LAST NAME"]}`;
                 }
@@ -87,27 +103,33 @@ document.addEventListener("DOMContentLoaded", function () {
                 careerAVG = row["AVG"] || "–";
                 careerH = row["H"] || "0";
 
-                addRow(careerHitBody, row, ["AB", "H", "R", "RBI", "2B", "3B", "HR", "AVG"]);
+                addRow(careerHitBody, row, ["AB","H","R","RBI","2B","3B","HR","AVG"]);
             }
         });
     });
 
-    // CAREER PITCHING
+    // 2️⃣ CAREER PITCHING
     loadCSV(FILES.careerPitching, data => {
-        data.forEach(row => {
+        data.forEach(raw => {
+            const row = normalizeRow(raw);
+
             if (row["PLAYER ID"] === playerId) {
+
                 careerIP = row["IP"] || "0";
                 careerERA = row["ERA"] || "–";
 
-                addRow(careerPitchBody, row, ["IP", "K", "W", "S", "BB", "R", "H", "ERA", "WHIP"]);
+                addRow(careerPitchBody, row, ["IP","K","W","S","BB","R","H","ERA","WHIP"]);
             }
         });
     });
 
-    // SEASON HITTING (Season links)
+    // 3️⃣ SEASON HITTING (with season links)
     loadCSV(FILES.seasonHitting, data => {
-        data.forEach(row => {
+        data.forEach(raw => {
+            const row = normalizeRow(raw);
+
             if (row["PLAYER ID"] === playerId) {
+
                 const tr = document.createElement("tr");
 
                 const season = row["SEASON"];
@@ -126,10 +148,13 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    // SEASON PITCHING (Season links)
+    // 4️⃣ SEASON PITCHING (with season links)
     loadCSV(FILES.seasonPitching, data => {
-        data.forEach(row => {
+        data.forEach(raw => {
+            const row = normalizeRow(raw);
+
             if (row["PLAYER ID"] === playerId) {
+
                 const tr = document.createElement("tr");
 
                 const season = row["SEASON"];
