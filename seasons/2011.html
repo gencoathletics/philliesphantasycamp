@@ -2,100 +2,116 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>2011 Season - Phillies Phantasy Camp</title>
+    <title>2011 Season</title>
 
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <!-- DataTables -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+
+    <!-- PapaParse -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+
+    <!-- Seasons JS (v9 initializes DataTables AFTER data loads) -->
+    <script src="../js/seasons.js?v=9"></script>
 
     <style>
         body { font-family: Arial, sans-serif; margin: 20px; }
-        nav { background-color: #8b0000; padding: 10px; margin-bottom: 20px; }
+        nav { background-color: #8b0000; padding: 10px; display: flex; align-items: center; margin-bottom: 30px; }
         nav a { color: white; margin-right: 20px; text-decoration: none; font-weight: bold; }
-        h1, h2 { color: #b30000; }
-        table { margin-bottom: 40px; }
-        #seasonSelect { margin-left: 10px; padding: 4px; font-size: 14px; }
+        nav img { height: 40px; margin-right: 20px; }
+        h1 { margin-bottom: 10px; }
+        h2 { margin-top: 40px; margin-bottom: 10px; }
+        table { width: 100%; margin-bottom: 40px; border-collapse: collapse; }
+        table thead th { background: #eee; padding: 8px; border-bottom: 2px solid #ccc; }
+        table tbody td { padding: 6px; border-bottom: 1px solid #ddd; }
+        #seasonDropdown { margin-left: 10px; padding: 5px; }
     </style>
 </head>
 
-<body>
+<body data-season="2011">
 
-    <nav style="background-color: #8b0000; padding: 10px; display: flex; align-items: center;">
-    
-    <!-- Small left‑aligned logo -->
-    <img src="/philliesphantasycamp/images/logo.png" 
-         alt="Logo" 
-         style="height: 40px; margin-right: 20px;">
-
-    <!-- Navigation links -->
-    <a href="/philliesphantasycamp/index.html" 
-       style="color: white; margin-right: 20px; text-decoration: none; font-weight: bold;">
-       Home
-    </a>
-
-    <a href="/philliesphantasycamp/career.html" 
-       style="color: white; margin-right: 20px; text-decoration: none; font-weight: bold;">
-       Career Leaders
-    </a>
-
-    <a href="/philliesphantasycamp/seasons/index.html" 
-       style="color: white; margin-right: 20px; text-decoration: none; font-weight: bold;">
-       Seasons
-    </a>
-
-    <!-- FIXED: now goes to the new Player Directory -->
-    <a href="/philliesphantasycamp/players/index.html" 
-       style="color: white; margin-right: 20px; text-decoration: none; font-weight: bold;">
-       Player Pages
-    </a>
-
+<nav>
+    <img src="/philliesphantasycamp/images/logo.png" alt="Logo">
+    <a href="/philliesphantasycamp/index.html">Home</a>
+    <a href="/philliesphantasycamp/career.html">Career Leaders</a>
+    <a href="/philliesphantasycamp/seasons/index.html">Seasons</a>
+    <a href="/philliesphantasycamp/players/index.html">Player Pages</a>
 </nav>
 
+<h1>2011 Season</h1>
 
-    <h1>2011 Season</h1>
+<label><strong>Jump to Season:</strong></label>
+<select id="seasonDropdown" onchange="location.href=this.value;">
+    <option value="">Select Season</option>
+    <option value="2009.html">2009</option>
+    <option value="2010.html">2010</option>
+    <option value="2011.html" selected>2011</option>
+    <option value="2012.html">2012</option>
+    <option value="2013.html">2013</option>
+    <option value="2014.html">2014</option>
+    <option value="2015.html">2015</option>
+    <option value="2016.html">2016</option>
+    <option value="2017.html">2017</option>
+    <option value="2018.html">2018</option>
+    <option value="2019.html">2019</option>
+    <option value="2020.html">2020</option>
+    <option value="2022.html">2022</option>
+    <option value="2023.html">2023</option>
+    <option value="2024.html">2024</option>
+    <option value="2025.html">2025</option>
+    <option value="2026.html">2026</option>
+</select>
 
-    <label for="seasonSelect"><strong>Jump to Season:</strong></label>
-    <select id="seasonSelect" onchange="location.href=this.value;">
-        <option value="2026.html">2026</option>
-        <option value="2025.html">2025</option>
-        <option value="2024.html">2024</option>
-        <option value="2023.html">2023</option>
-        <option value="2022.html">2022</option>
-        <option value="2020.html">2020</option>
-        <option value="2019.html">2019</option>
-        <option value="2018.html">2018</option>
-        <option value="2017.html">2017</option>
-        <option value="2016.html">2016</option>
-        <option value="2015.html">2015</option>
-        <option value="2014.html">2014</option>
-        <option value="2013.html">2013</option>
-        <option value="2012.html">2012</option>
-        <option value="2011.html" selected>2011</option>
-        <option value="2010.html">2010</option>
-        <option value="2009.html">2009</option>
-    </select>
+<!-- ========================= -->
+<!--        HITTING TABLE      -->
+<!-- ========================= -->
 
-    <h2>Hitting</h2>
-    <table id="seasonHitting" class="display">
-        <thead>
-            <tr>
-                <th>Player</th><th>AB</th><th>H</th><th>R</th><th>RBI</th><th>2B</th><th>3B</th><th>HR</th><th>AVG</th>
-            </tr>
-        </thead>
-    </table>
+<h2>Hitting</h2>
+<table id="hittingTable">
+    <thead>
+        <tr>
+            <th style="display:none;">Sort</th> <!-- hidden last-name sort -->
+            <th>Player</th>
+            <th>AB</th>
+            <th>H</th>
+            <th>R</th>
+            <th>RBI</th>
+            <th>2B</th>
+            <th>3B</th>
+            <th>HR</th>
+            <th>AVG</th>
+        </tr>
+    </thead>
+    <tbody id="hittingBody"></tbody>
+</table>
 
-    <h2>Pitching</h2>
-    <table id="seasonPitching" class="display">
-        <thead>
-            <tr>
-                <th>Player</th><th>IP</th><th>K</th><th>W</th><th>S</th><th>BB</th><th>R</th><th>H</th><th>ERA</th><th>WHIP</th>
-            </tr>
-        </thead>
-    </table>
+<!-- ========================= -->
+<!--       PITCHING TABLE      -->
+<!-- ========================= -->
 
-    <script src="/philliesphantasycamp/js/seasons.js"></script>
-    <script> loadSeason(2011); </script>
+<h2>Pitching</h2>
+<table id="pitchingTable">
+    <thead>
+        <tr>
+            <th style="display:none;">Sort</th>      <!-- hidden last-name sort -->
+            <th>Player</th>
+            <th style="display:none;">IP Sort</th>   <!-- hidden numeric IP sort -->
+            <th>IP</th>
+            <th>K</th>
+            <th>W</th>
+            <th>S</th>
+            <th>BB</th>
+            <th>R</th>
+            <th>H</th>
+            <th>ERA</th>
+            <th>WHIP</th>
+        </tr>
+    </thead>
+    <tbody id="pitchingBody"></tbody>
+</table>
+
+<!-- No DataTables init here. seasons.js v9 handles it AFTER data loads. -->
 
 </body>
 </html>
