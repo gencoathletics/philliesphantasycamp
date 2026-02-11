@@ -12,8 +12,8 @@
     <!-- PapaParse -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 
-    <!-- Seasons JS (final version coming next) -->
-    <script src="../js/seasons.js?v=7"></script>
+    <!-- Seasons JS (v8 handles DataTables init AFTER data loads) -->
+    <script src="../js/seasons.js?v=8"></script>
 
     <style>
         body { font-family: Arial, sans-serif; margin: 20px; }
@@ -67,7 +67,7 @@
 <table id="hittingTable">
     <thead>
         <tr>
-            <th style="display:none;">Sort</th> <!-- Hidden last-name sort column -->
+            <th style="display:none;">Sort</th> <!-- hidden last-name sort column -->
             <th>Player</th>
             <th>AB</th>
             <th>H</th>
@@ -86,7 +86,7 @@
 <table id="pitchingTable">
     <thead>
         <tr>
-            <th style="display:none;">Sort</th> <!-- Hidden last-name sort column -->
+            <th style="display:none;">Sort</th> <!-- hidden last-name sort column -->
             <th>Player</th>
             <th>IP</th>
             <th>K</th>
@@ -102,26 +102,7 @@
     <tbody id="pitchingBody"></tbody>
 </table>
 
-<!-- DataTables initialization -->
-<script>
-$(document).ready(function() {
-    $('#hittingTable').DataTable({
-        columnDefs: [
-            { targets: 0, visible: false },
-            { targets: 1, orderData: 0 }
-        ],
-        order: [[0, 'asc']]
-    });
-
-    $('#pitchingTable').DataTable({
-        columnDefs: [
-            { targets: 0, visible: false },
-            { targets: 1, orderData: 0 }
-        ],
-        order: [[0, 'asc']]
-    });
-});
-</script>
+<!-- IMPORTANT: No DataTables init here. seasons.js v8 handles it AFTER data loads. -->
 
 </body>
 </html>
