@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
     }
 
-    // CSV PATHS — ALL FIXED
+    // CSV PATHS
     const PATH = "/philliesphantasycamp/data/";
 
     const FILES = {
@@ -28,14 +28,39 @@ document.addEventListener("DOMContentLoaded", function () {
     const careerHitBody = document.getElementById("careerHittingBody");
     const careerPitchBody = document.getElementById("careerPitchingBody");
 
+    // Summary bar elements
+    const summaryBar = document.getElementById("careerSummary");
+    const sumAVG = document.getElementById("sumAVG");
+    const sumHR = document.getElementById("sumHR");
+    const sumRBI = document.getElementById("sumRBI");
+    const sumERA = document.getElementById("sumERA");
+    const sumIP = document.getElementById("sumIP");
+
     let playerName = null;
     let loadCount = 0;
+
+    // Summary values
+    let careerAVG = null;
+    let careerHR = null;
+    let careerRBI = null;
+    let careerERA = null;
+    let careerIP = null;
 
     function checkDone() {
         loadCount++;
         if (loadCount === 4) {
             loadingEl.style.display = "none";
             if (playerName) nameEl.textContent = playerName;
+
+            // Show summary bar once all data is loaded
+            summaryBar.style.display = "flex";
+
+            // Populate summary bar
+            sumAVG.textContent = careerAVG ?? "–";
+            sumHR.textContent = careerHR ?? "–";
+            sumRBI.textContent = careerRBI ?? "–";
+            sumERA.textContent = careerERA ?? "–";
+            sumIP.textContent = careerIP ?? "–";
         }
     }
 
@@ -66,9 +91,18 @@ document.addEventListener("DOMContentLoaded", function () {
     loadCSV(FILES.careerHitting, data => {
         data.forEach(row => {
             if (row["PLAYER ID"] === playerId) {
+
+                // Capture player name
                 if (!playerName) {
                     playerName = `${row["FIRST NAME"]} ${row["LAST NAME"]}`;
                 }
+
+                // Capture summary stats
+                careerAVG = row["AVG"] || "–";
+                careerHR = row["HR"] || "0";
+                careerRBI = row["RBI"] || "0";
+
+                // Add table row
                 addRow(careerHitBody, row, ["AB", "H", "R", "RBI", "2B", "3B", "HR", "AVG"]);
             }
         });
@@ -78,6 +112,11 @@ document.addEventListener("DOMContentLoaded", function () {
     loadCSV(FILES.careerPitching, data => {
         data.forEach(row => {
             if (row["PLAYER ID"] === playerId) {
+
+                // Capture summary stats
+                careerERA = row["ERA"] || "–";
+                careerIP = row["IP"] || "0";
+
                 addRow(careerPitchBody, row, ["IP", "K", "W", "S", "BB", "R", "H", "ERA", "WHIP"]);
             }
         });
