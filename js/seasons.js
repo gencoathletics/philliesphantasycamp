@@ -1,7 +1,6 @@
-console.log(">>> SEASONS.JS VERSION 5 (FINAL) <<<");
+console.log(">>> SEASONS.JS VERSION 6 (FINAL) <<<");
 
 document.addEventListener("DOMContentLoaded", function () {
-
     const season = document.body.getAttribute("data-season");
     if (!season) return;
 
@@ -15,20 +14,22 @@ document.addEventListener("DOMContentLoaded", function () {
     const hitBody = document.getElementById("hittingBody");
     const pitchBody = document.getElementById("pitchingBody");
 
-    // ⭐ Normalize CSV keys
+    // Normalize CSV keys
     function normalizeRow(row) {
         const clean = {};
-        Object.keys(row).forEach(key => clean[key.trim()] = row[key]);
+        Object.keys(row).forEach(key => {
+            clean[key.trim()] = row[key];
+        });
         return clean;
     }
 
-    // ⭐ Build full name + sorting key
+    // Build full name + sort key using "FIRST NAME" / "LAST NAME"
     function buildPlayerName(row) {
-        const first = row["FIRST_NAME"] || "";
-        const last = row["LAST_NAME"] || "";
+        const first = row["FIRST NAME"] || "";
+        const last = row["LAST NAME"] || "";
         return {
             display: `${first} ${last}`.trim(),
-            sortKey: `${last.toLowerCase()}_${first.toLowerCase()}`
+            sortKey: `${(last || "").toLowerCase()}_${(first || "").toLowerCase()}`
         };
     }
 
@@ -40,7 +41,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // ⭐ HITTING TABLE
+    // HITTING TABLE
     loadCSV(FILES.hitting, data => {
         data.forEach(raw => {
             const row = normalizeRow(raw);
@@ -48,7 +49,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
             const tr = document.createElement("tr");
 
-            // Build name + sort key
             const nameObj = buildPlayerName(row);
 
             const playerCell = document.createElement("td");
@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    // ⭐ PITCHING TABLE
+    // PITCHING TABLE
     loadCSV(FILES.pitching, data => {
         data.forEach(raw => {
             const row = normalizeRow(raw);
