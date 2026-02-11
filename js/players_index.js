@@ -4,7 +4,8 @@ document.addEventListener("DOMContentLoaded", function () {
         download: true,
         header: true,
         complete: function (results) {
-            const data = results.data;
+    console.log("PARSE RESULT SAMPLE:", results.data.slice(0, 5));
+    const data = results.data;
 
             // Collect unique players using REAL CSV headers
             const players = {};
