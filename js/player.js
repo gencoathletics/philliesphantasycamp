@@ -1,4 +1,5 @@
 console.log(">>> PLAYER.JS VERSION 2 <<<");
+// force rebuild
 
 document.addEventListener("DOMContentLoaded", function () {
     const urlParams = new URLSearchParams(window.location.search);
@@ -8,7 +9,6 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("playerName").textContent = "Player Not Found";
         return;
     }
-
     
     // CSV PATHS
     const PATH = "/philliesphantasycamp/data/";
