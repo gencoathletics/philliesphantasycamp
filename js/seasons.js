@@ -1,4 +1,4 @@
-console.log(">>> SEASONS.JS VERSION 7 (FINAL) <<<");
+console.log(">>> SEASONS.JS VERSION 8 <<<");
 
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -15,18 +15,18 @@ document.addEventListener("DOMContentLoaded", function () {
     const hitBody = document.getElementById("hittingBody");
     const pitchBody = document.getElementById("pitchingBody");
 
-    // Normalize CSV keys (trim whitespace)
+    let hittingLoaded = false;
+    let pitchingLoaded = false;
+
     function normalizeRow(row) {
         const clean = {};
         Object.keys(row).forEach(key => clean[key.trim()] = row[key]);
         return clean;
     }
 
-    // Build full name + hidden sort key
     function buildPlayerName(row) {
         const first = row["FIRST NAME"] || "";
         const last = row["LAST NAME"] || "";
-
         return {
             display: `${first} ${last}`.trim(),
             sortKey: `${last.toLowerCase()}_${first.toLowerCase()}`
@@ -41,25 +41,41 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // -------------------------
-    // HITTING TABLE
-    // -------------------------
+    function tryInitTables() {
+        if (hittingLoaded && !$.fn.dataTable.isDataTable('#hittingTable')) {
+            $('#hittingTable').DataTable({
+                columnDefs: [
+                    { targets: 0, visible: false },
+                    { targets: 1, orderData: 0 }
+                ],
+                order: [[0, 'asc']]
+            });
+        }
+        if (pitchingLoaded && !$.fn.dataTable.isDataTable('#pitchingTable')) {
+            $('#pitchingTable').DataTable({
+                columnDefs: [
+                    { targets: 0, visible: false },
+                    { targets: 1, orderData: 0 }
+                ],
+                order: [[0, 'asc']]
+            });
+        }
+    }
+
+    // HITTING
     loadCSV(FILES.hitting, data => {
         data.forEach(raw => {
             const row = normalizeRow(raw);
             if (row["SEASON"] !== season) return;
 
             const tr = document.createElement("tr");
-
             const nameObj = buildPlayerName(row);
 
-            // Hidden sort column
             const sortCell = document.createElement("td");
             sortCell.style.display = "none";
             sortCell.textContent = nameObj.sortKey;
             tr.appendChild(sortCell);
 
-            // Visible PLAYER column
             const playerCell = document.createElement("td");
             playerCell.innerHTML = `
                 <a href="/philliesphantasycamp/players/player.html?id=${row["PLAYER ID"]}">
@@ -68,7 +84,6 @@ document.addEventListener("DOMContentLoaded", function () {
             `;
             tr.appendChild(playerCell);
 
-            // Stat columns
             ["AB","H","R","RBI","2B","3B","HR","AVG"].forEach(f => {
                 const td = document.createElement("td");
                 td.textContent = row[f] || "";
@@ -77,27 +92,25 @@ document.addEventListener("DOMContentLoaded", function () {
 
             hitBody.appendChild(tr);
         });
+
+        hittingLoaded = true;
+        tryInitTables();
     });
 
-    // -------------------------
-    // PITCHING TABLE
-    // -------------------------
+    // PITCHING
     loadCSV(FILES.pitching, data => {
         data.forEach(raw => {
             const row = normalizeRow(raw);
             if (row["SEASON"] !== season) return;
 
             const tr = document.createElement("tr");
-
             const nameObj = buildPlayerName(row);
 
-            // Hidden sort column
             const sortCell = document.createElement("td");
             sortCell.style.display = "none";
             sortCell.textContent = nameObj.sortKey;
             tr.appendChild(sortCell);
 
-            // Visible PLAYER column
             const playerCell = document.createElement("td");
             playerCell.innerHTML = `
                 <a href="/philliesphantasycamp/players/player.html?id=${row["PLAYER ID"]}">
@@ -106,7 +119,6 @@ document.addEventListener("DOMContentLoaded", function () {
             `;
             tr.appendChild(playerCell);
 
-            // Stat columns
             ["IP","K","W","S","BB","R","H","ERA","WHIP"].forEach(f => {
                 const td = document.createElement("td");
                 td.textContent = row[f] || "";
@@ -115,6 +127,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
             pitchBody.appendChild(tr);
         });
+
+        pitchingLoaded = true;
+        tryInitTables();
     });
 
 });
