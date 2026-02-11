@@ -39,13 +39,14 @@ document.addEventListener("DOMContentLoaded", function () {
                 list.appendChild(li);
             });
 
-            // Live search filter (with trim fix)
+            // ⭐ Anchor-based search fix
             document.getElementById("searchBox").addEventListener("input", function () {
                 const term = this.value.toLowerCase().trim();
                 const items = list.getElementsByTagName("li");
 
                 for (let i = 0; i < items.length; i++) {
-                    const text = items[i].innerText.toLowerCase().trim();
+                    const link = items[i].querySelector("a");
+                    const text = link.textContent.toLowerCase().trim();
                     items[i].style.display = text.includes(term) ? "" : "none";
                 }
             });
