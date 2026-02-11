@@ -12,8 +12,8 @@
     <!-- PapaParse -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 
-    <!-- Seasons JS (v8 handles DataTables init AFTER data loads) -->
-    <script src="../js/seasons.js?v=8"></script>
+    <!-- Seasons JS (v9 will initialize DataTables AFTER data loads) -->
+    <script src="../js/seasons.js?v=9"></script>
 
     <style>
         body { font-family: Arial, sans-serif; margin: 20px; }
@@ -63,11 +63,15 @@
     <option value="2026.html">2026</option>
 </select>
 
+<!-- ========================= -->
+<!--        HITTING TABLE      -->
+<!-- ========================= -->
+
 <h2>Hitting</h2>
 <table id="hittingTable">
     <thead>
         <tr>
-            <th style="display:none;">Sort</th> <!-- hidden last-name sort column -->
+            <th style="display:none;">Sort</th> <!-- hidden last-name sort -->
             <th>Player</th>
             <th>AB</th>
             <th>H</th>
@@ -81,6 +85,10 @@
     </thead>
     <tbody id="hittingBody"></tbody>
 </table>
+
+<!-- ========================= -->
+<!--       PITCHING TABLE      -->
+<!-- ========================= -->
 
 <h2>Pitching</h2>
 <table id="pitchingTable">
@@ -103,7 +111,7 @@
     <tbody id="pitchingBody"></tbody>
 </table>
 
-<!-- IMPORTANT: No DataTables init here. seasons.js v8 handles it AFTER data loads. -->
+<!-- IMPORTANT: No DataTables init here. seasons.js v9 handles it AFTER data loads. -->
 
 </body>
 </html>
