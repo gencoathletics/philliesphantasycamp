@@ -1,33 +1,47 @@
 // -------------------------------
-// CSV PATHS
+// Navigation Loader (same as other pages)
 // -------------------------------
-const HITTING_CAREER_CSV = "/philliesphantasycamp/data/hittingcareer_normalized.csv";
-const PITCHING_CAREER_CSV = "/philliesphantasycamp/data/pitchingcareer_normalized.csv";
+function loadNav() {
+    fetch("/philliesphantasycamp/nav.html")
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById("nav-placeholder").innerHTML = html;
+        })
+        .catch(err => console.error("Navigation load error:", err));
+}
 
 // -------------------------------
-// LOAD CSV (PapaParse)
+// CSV Loader
 // -------------------------------
-function loadCSV(path, callback) {
-    Papa.parse(path, {
-        download: true,
-        header: true,
-        dynamicTyping: false,
-        complete: function (results) {
-            callback(results.data);
-        }
+function loadCSV(path) {
+    return new Promise((resolve, reject) => {
+        Papa.parse(path, {
+            download: true,
+            header: true,
+            dynamicTyping: false,
+            complete: results => resolve(results.data),
+            error: err => reject(err)
+        });
     });
 }
 
 // -------------------------------
-// SORT KEY: "LAST FIRST"
+// Helpers
 // -------------------------------
 function sortKey(row) {
     return `${row["LAST NAME"]} ${row["FIRST NAME"]}`.toUpperCase();
 }
 
-// -------------------------------
-// Convert "99 2/3" → numeric
-// -------------------------------
+function formatAVG(value) {
+    if (!value) return "";
+    return Number(value).toFixed(3);
+}
+
+function format2(value) {
+    if (!value) return "";
+    return Number(value).toFixed(2);
+}
+
 function convertFractionIP(ipString) {
     if (!ipString || typeof ipString !== "string") return 0;
 
@@ -40,45 +54,34 @@ function convertFractionIP(ipString) {
 
     const whole = Number(parts[0]);
     const fraction = parts[1];
-
     const fracParts = fraction.split("/");
+
     if (fracParts.length !== 2) return whole;
 
     const num = Number(fracParts[0]);
     const den = Number(fracParts[1]);
 
-    if (isNaN(num) || isNaN(den) || den === 0) return whole;
+    if (isNaN(whole) || isNaN(num) || isNaN(den) || den === 0) return whole;
 
     return whole + (num / den);
 }
 
 // -------------------------------
-// Formatters
-// -------------------------------
-function formatAVG(value) {
-    if (!value) return "";
-    return Number(value).toFixed(3);
-}
-
-function format2(value) {
-    if (!value) return "";
-    return Number(value).toFixed(2);
-}
-
-// -------------------------------
-// CAREER HITTING TABLE
+// Build Career Hitting Table
 // -------------------------------
 function buildCareerHittingTable(rows) {
-    $('#careerHitting').DataTable({
+    $("#careerHitting").DataTable({
         data: rows,
         destroy: true,
         columns: [
             {
                 title: "Player",
                 data: null,
-                render: function (row, type) {
+                render: (row, type) => {
                     if (type === "sort") return sortKey(row);
-                    return `<a href="/philliesphantasycamp/players/${row["PLAYER ID"]}.html">${row["FIRST NAME"]} ${row["LAST NAME"]}</a>`;
+                    return `<a href="/philliesphantasycamp/players/${row["PLAYER ID"]}.html">
+                                ${row["FIRST NAME"]} ${row["LAST NAME"]}
+                            </a>`;
                 }
             },
             { title: "AB", data: "AB" },
@@ -91,9 +94,7 @@ function buildCareerHittingTable(rows) {
             {
                 title: "AVG",
                 data: "AVG",
-                render: function (value) {
-                    return formatAVG(value);
-                }
+                render: value => formatAVG(value)
             }
         ],
         order: [[0, "asc"]]
@@ -101,23 +102,25 @@ function buildCareerHittingTable(rows) {
 }
 
 // -------------------------------
-// CAREER PITCHING TABLE
+// Build Career Pitching Table
 // -------------------------------
 function buildCareerPitchingTable(rows) {
     rows.forEach(row => {
         row.IP_SORT = convertFractionIP(row["IP"]);
     });
 
-    $('#careerPitching').DataTable({
+    $("#careerPitching").DataTable({
         data: rows,
         destroy: true,
         columns: [
             {
                 title: "Player",
                 data: null,
-                render: function (row, type) {
+                render: (row, type) => {
                     if (type === "sort") return sortKey(row);
-                    return `<a href="/philliesphantasycamp/players/${row["PLAYER ID"]}.html">${row["FIRST NAME"]} ${row["LAST NAME"]}</a>`;
+                    return `<a href="/philliesphantasycamp/players/${row["PLAYER ID"]}.html">
+                                ${row["FIRST NAME"]} ${row["LAST NAME"]}
+                            </a>`;
                 }
             },
             { title: "IP", data: "IP" },
@@ -130,52 +133,45 @@ function buildCareerPitchingTable(rows) {
             {
                 title: "ERA",
                 data: "ERA",
-                render: function (value) {
-                    return format2(value);
-                }
+                render: value => format2(value)
             },
             {
                 title: "WHIP",
                 data: "WHIP",
-                render: function (value) {
-                    return format2(value);
-                }
+                render: value => format2(value)
             },
             {
+                title: "IP_SORT",
                 data: "IP_SORT",
                 visible: false,
                 searchable: false
             }
         ],
         columnDefs: [
-            {
-                targets: 1,
-                orderData: [10]
-            }
+            { targets: 1, orderData: [10] }
         ],
         order: [[0, "asc"]]
     });
 }
 
 // -------------------------------
-// LOAD BOTH TABLES
+// Main Loader
 // -------------------------------
-function loadCareer() {
-    loadCSV(HITTING_CAREER_CSV, buildCareerHittingTable);
-    loadCSV(PITCHING_CAREER_CSV, buildCareerPitchingTable);
+async function loadCareer() {
+    loadNav(); // load navigation first
+
+    try {
+        const hitting = await loadCSV("/philliesphantasycamp/data/hittingcareer_normalized.csv");
+        const pitching = await loadCSV("/philliesphantasycamp/data/pitchingcareer_normalized.csv");
+
+        buildCareerHittingTable(hitting);
+        buildCareerPitchingTable(pitching);
+    } catch (err) {
+        console.error("Career page load error:", err);
+    }
 }
 
 // -------------------------------
-// NAVIGATION BAR (same as other pages)
+// Run on page load
 // -------------------------------
-function loadNav() {
-    $("#nav").load("/philliesphantasycamp/nav.html");
-}
-
-// -------------------------------
-// RUN ON PAGE LOAD
-// -------------------------------
-$(document).ready(function () {
-    loadNav();
-    loadCareer();
-});
+document.addEventListener("DOMContentLoaded", loadCareer);
