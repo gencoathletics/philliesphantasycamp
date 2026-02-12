@@ -1,44 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Career Leaders</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Career Leaders</title>
 
-    <!-- DataTables CSS -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
+  <!-- DataTables CSS -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
 
-    <!-- Your site CSS -->
-    <link rel="stylesheet" href="/philliesphantasycamp/style.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+
+    h2 {
+      color: #b30000;
+      margin-top: 40px;
+    }
+  </style>
 </head>
 
 <body>
-    <header>
-        <h1>Career Leaders</h1>
-    </header>
 
-    <main>
-        <section>
-            <h2>Career Hitting</h2>
-            <table id="careerHitting" class="display" style="width:100%"></table>
-        </section>
+  <!-- Navigation -->
+  <nav id="navbar"></nav>
 
-        <section>
-            <h2>Career Pitching</h2>
-            <table id="careerPitching" class="display" style="width:100%"></table>
-        </section>
-    </main>
+  <h2>Career Hitting Leaders</h2>
+  <table id="careerHitting">
+    <thead></thead>
+    <tbody></tbody>
+  </table>
 
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <h2>Career Pitching Leaders</h2>
+  <table id="careerPitching">
+    <thead></thead>
+    <tbody></tbody>
+  </table>
 
-    <!-- PapaParse -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+  <!-- jQuery + DataTables -->
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 
-    <!-- DataTables -->
-    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <!-- Navigation Script -->
+  <script src="/philliesphantasycamp/js/nav.js"></script>
 
-    <!-- Your JS -->
-    <script src="/philliesphantasycamp/js/career.js"></script>
+  <!-- Career JS -->
+  <script src="/philliesphantasycamp/js/career.js"></script>
+
 </body>
 </html>
