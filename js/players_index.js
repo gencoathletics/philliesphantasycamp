@@ -1,59 +1,50 @@
-console.log(">>> LOADED players_index.js FROM HERE <<<");
-
 document.addEventListener("DOMContentLoaded", function () {
 
     Papa.parse("/philliesphantasycamp/data/hittingcareer_normalized.csv", {
         download: true,
         header: true,
         complete: function (results) {
-    console.log("PARSE RESULT SAMPLE:", results.data.slice(0, 5));
-    const data = results.data;
 
-            // Collect unique players using REAL CSV headers
+            const data = results.data;
+
+            // Collect unique players
             const players = {};
             data.forEach(row => {
-                const id = row["PLAYER ID"];
-                const first = row["FIRST NAME"];
-                const last = row["LAST NAME"];
-
-                if (id && first && last) {
-                    players[id] = {
-                        id: id.trim(),
-                        first: first.trim(),
-                        last: last.trim()
+                if (row["PLAYER ID"] && row["FIRST NAME"] && row["LAST NAME"]) {
+                    players[row["PLAYER ID"]] = {
+                        id: row["PLAYER ID"],
+                        first: row["FIRST NAME"].trim(),
+                        last: row["LAST NAME"].trim()
                     };
                 }
             });
 
-            // Convert to array + sort by last name, then first name
-            const playerArray = Object.values(players).sort((a, b) => {
+            // Convert to array + sort
+            const list = Object.values(players).sort((a, b) => {
                 if (a.last === b.last) return a.first.localeCompare(b.first);
                 return a.last.localeCompare(b.last);
             });
 
-            // Render list
-            const list = document.getElementById("playerList");
-            playerArray.forEach(p => {
-                const li = document.createElement("li");
+            const ul = document.getElementById("playerList");
 
+            list.forEach(p => {
+                const li = document.createElement("li");
                 li.innerHTML = `
                     <a class="playerLink"
                        href="/philliesphantasycamp/players/player.html?id=${p.id}">
                        ${p.first} ${p.last}
-                    </a>
-                `;
-
-                list.appendChild(li);
+                    </a>`;
+                ul.appendChild(li);
             });
 
-            // Anchor-based search fix
-            document.getElementById("searchBox").addEventListener("input", function () {
-                const term = this.value.toLowerCase().trim();
-                const items = list.getElementsByTagName("li");
+            // Live search
+            const searchBox = document.getElementById("searchBox");
+            searchBox.addEventListener("input", function () {
+                const term = this.value.toLowerCase();
+                const items = ul.getElementsByTagName("li");
 
                 for (let i = 0; i < items.length; i++) {
-                    const link = items[i].querySelector("a");
-                    const text = link.textContent.toLowerCase().trim();
+                    const text = items[i].innerText.toLowerCase();
                     items[i].style.display = text.includes(term) ? "" : "none";
                 }
             });
