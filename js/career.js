@@ -119,9 +119,9 @@ function buildCareerPitchingTable(rows) {
                 data: null,
                 render: (row, type) => {
                     if (type === "sort") return sortKey(row);
-                    return `<a href="/philliesphantasycamp/players/${row["PLAYER ID"]}.html">
-                                ${row["FIRST NAME"]} ${row["LAST NAME"]}
-                            </a>`;
+                    return `<a href="/philliesphantasycamp/players/player.html?id=${row["PLAYER ID"]}">
+            ${row["FIRST NAME"]} ${row["LAST NAME"]}
+        </a>`;
                 }
             },
             { title: "IP", data: "IP" },
