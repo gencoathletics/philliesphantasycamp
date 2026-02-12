@@ -18,34 +18,50 @@
       color: #b30000;
       margin-top: 40px;
     }
+
+    /* Navigation Bar */
+    .navbar {
+      background: #b30000;
+      padding: 12px;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      margin: 0 15px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .navbar a:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 
 <body>
 
-  <!-- Navigation -->
-  <nav id="navbar"></nav>
+  <!-- Global Navigation Bar -->
+  <nav class="navbar">
+    <a href="/philliesphantasycamp/index.html">Home</a>
+    <a href="/philliesphantasycamp/career.html">Career Leaders</a>
+    <a href="/philliesphantasycamp/seasons/index.html">Seasons</a>
+    <a href="/philliesphantasycamp/players/index.html">Players</a>
+  </nav>
 
   <h2>Career Hitting Leaders</h2>
-  <table id="careerHitting">
-    <thead></thead>
-    <tbody></tbody>
-  </table>
+  <table id="careerHitting" class="display" style="width:100%"></table>
 
   <h2>Career Pitching Leaders</h2>
-  <table id="careerPitching">
-    <thead></thead>
-    <tbody></tbody>
-  </table>
+  <table id="careerPitching" class="display" style="width:100%"></table>
 
-  <!-- jQuery + DataTables -->
+  <!-- jQuery + DataTables JS -->
   <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
   <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 
-  <!-- Navigation Script -->
-  <script src="/philliesphantasycamp/js/nav.js"></script>
-
-  <!-- Career JS -->
+  <!-- Your career.js -->
   <script src="/philliesphantasycamp/js/career.js"></script>
 
 </body>
