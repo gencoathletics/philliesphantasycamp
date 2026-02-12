@@ -2,6 +2,10 @@
 table.dataTable thead th {
     text-align: left !important;
 }
+/* Left-align all table headers and cells */
+table th, table td {
+    text-align: left;
+}
 
 /* Optional: make tables feel cleaner */
 table.dataTable tbody td {
