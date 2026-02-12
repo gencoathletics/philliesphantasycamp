@@ -22,13 +22,12 @@ function convertFractionIP(ipString) {
     const parts = ipString.trim().split(" ");
 
     if (parts.length === 1) {
-        // No fraction, just a whole number
         const wholeOnly = Number(parts[0]);
         return isNaN(wholeOnly) ? 0 : wholeOnly;
     }
 
     const whole = Number(parts[0]);
-    const fraction = parts[1]; // e.g. "2/3"
+    const fraction = parts[1];
 
     const fracParts = fraction.split("/");
     if (fracParts.length !== 2) return isNaN(whole) ? 0 : whole;
@@ -89,7 +88,6 @@ function buildCareerHittingTable(rows) {
 
 // Build Career Pitching Table
 function buildCareerPitchingTable(rows) {
-    // Precompute a numeric sort key for IP
     rows.forEach(function (row) {
         row.IP_SORT = convertFractionIP(row["IP"]);
     });
@@ -106,9 +104,7 @@ function buildCareerPitchingTable(rows) {
                     return `<a href="/philliesphantasycamp/players/${row["PLAYER ID"]}.html">${row["FIRST NAME"]} ${row["LAST NAME"]}</a>`;
                 }
             },
-            {
-                data: "IP",   // display "99 2/3"
-            },
+            { data: "IP" },
             { data: "K" },
             { data: "W" },
             { data: "S" },
@@ -128,15 +124,15 @@ function buildCareerPitchingTable(rows) {
                 }
             },
             {
-                data: "IP_SORT",   // hidden numeric sort key
+                data: "IP_SORT",
                 visible: false,
                 searchable: false
             }
         ],
         columnDefs: [
             {
-                targets: 1,       // IP column
-                orderData: [10]   // sort using IP_SORT (last column)
+                targets: 1,
+                orderData: [10]
             }
         ],
         order: [[0, "asc"]]
