@@ -1,75 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <title>2027 Standings</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+  <title>2027 Standings</title>
 
-    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
-    js/standings.jsscript>
+  <linkliesphantasycamp/css/style.css
 
-    <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        h1 { color: #b30000; }
-        h2 { margin-top: 30px; }
-        table { width: 100%; margin-bottom: 30px; }
-    </style>
+  <link rel="stylesheet"
+        href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+
+    h1 {
+      color: #b30000;
+    }
+
+    h2 {
+      color: #b30000;
+      margin-top: 40px;
+    }
+
+    .points-info {
+      font-size: 18px;
+      margin-bottom: 25px;
+    }
+
+    .matchups {
+      margin-top: 20px;
+      line-height: 1.8;
+    }
+  </style>
+
 </head>
 
 <body>
 
-<div id="nav-placeholder"></div>
+  <!-- Global Navigation -->
+  <div id="navbar"></div>
 
-<h1>2027 Standings</h1>
+  <h1>2027 Standings</h1>
 
-<p>
-Win = 3 Points | Tie = 1 Point | Loss = 0 Points
-</p>
+  <div class="points-info">
+    Win = 3 Points | Tie = 1 Point | Loss = 0 Points
+  </div>
 
-<h2>Gillick Division</h2>
+  <h2>Gillick Division</h2>
 
-<table id="gillickTable" class="display">
+  <table id="gillickTable" class="display" style="width:100%">
     <thead>
-        <tr>
-            <th>Rank</th>
-            <th>Team</th>
-            <th>W</th>
-            <th>L</th>
-            <th>T</th>
-            <th>PTS</th>
-            <th>RS</th>
-            <th>RA</th>
-        </tr>
+      <tr>
+        <th>Rank</th>
+        <th>Team</th>
+        <th>W</th>
+        <th>L</th>
+        <th>T</th>
+        <th>PTS</th>
+        <th>RS</th>
+        <th>RA</th>
+      </tr>
     </thead>
     <tbody></tbody>
-</table>
+  </table>
 
-<h2>Owens Division</h2>
+  <h2>Owens Division</h2>
 
-<table id="owensTable" class="display">
+  <table id="owensTable" class="display" style="width:100%">
     <thead>
-        <tr>
-            <th>Rank</th>
-            <th>Team</th>
-            <th>W</th>
-            <th>L</th>
-            <th>T</th>
-            <th>PTS</th>
-            <th>RS</th>
-            <th>RA</th>
-        </tr>
+      <tr>
+        <th>Rank</th>
+        <th>Team</th>
+        <th>W</th>
+        <th>L</th>
+        <th>T</th>
+        <th>PTS</th>
+        <th>RS</th>
+        <th>RA</th>
+      </tr>
     </thead>
     <tbody></tbody>
-</table>
+  </table>
 
-<h2>Game 6 Matchups</h2>
+  <h2>Game 6 Matchups</h2>
 
-<div id="matchups">
+  <div id="matchups" class="matchups">
     Matchups will appear after Game 5.
-</div>
+  </div>
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+
+  <!-- DataTables -->
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+  <!-- Papa Parse -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+
+  <!-- Shared Navigation -->
+  /philliesphantasycamp/js/nav.jsscript>
+
+  <!-- Standings Logic -->
+  /philliesphantasycamp/js/standings.jsscript>
 
 </body>
 </html>
