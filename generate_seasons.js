@@ -89,7 +89,7 @@ const TEMPLATE = (year) => `
 
 const seasonsDir = path.join(__dirname, "seasons");
 
-for (let year = 2009; year <= 2026; year++) {
+for (let year = 2009; year <= 2027; year++) {
     const filePath = path.join(seasonsDir, `${year}.html`);
     fs.writeFileSync(filePath, TEMPLATE(year));
     console.log(`Generated: ${filePath}`);
