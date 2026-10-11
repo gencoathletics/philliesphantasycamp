@@ -30,7 +30,7 @@ const TEMPLATE = (year) => `
     <nav>
         <a href="../index.html">Home</a>
         <a href="../career.html">Career Leaders</a>
-        <a href="../seasons/2026.html">Seasons</a>
+        <a href="../seasons/2027.html">Seasons</a>
         <a href="../players/player.html?id=1">Player Pages</a>
     </nav>
 
