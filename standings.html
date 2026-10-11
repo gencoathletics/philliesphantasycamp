@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>2027 Standings</title>
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    js/standings.jsscript>
+
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h1 { color: #b30000; }
+        h2 { margin-top: 30px; }
+        table { width: 100%; margin-bottom: 30px; }
+    </style>
+</head>
+
+<body>
+
+<div id="nav-placeholder"></div>
+
+<h1>2027 Standings</h1>
+
+<p>
+Win = 3 Points | Tie = 1 Point | Loss = 0 Points
+</p>
+
+<h2>Gillick Division</h2>
+
+<table id="gillickTable" class="display">
+    <thead>
+        <tr>
+            <th>Rank</th>
+            <th>Team</th>
+            <th>W</th>
+            <th>L</th>
+            <th>T</th>
+            <th>PTS</th>
+            <th>RS</th>
+            <th>RA</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<h2>Owens Division</h2>
+
+<table id="owensTable" class="display">
+    <thead>
+        <tr>
+            <th>Rank</th>
+            <th>Team</th>
+            <th>W</th>
+            <th>L</th>
+            <th>T</th>
+            <th>PTS</th>
+            <th>RS</th>
+            <th>RA</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<h2>Game 6 Matchups</h2>
+
+<div id="matchups">
+    Matchups will appear after Game 5.
+</div>
+
+</body>
+</html>
